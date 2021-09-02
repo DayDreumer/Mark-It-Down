@@ -1,12 +1,12 @@
 <template>
   <div>
     <el-form ref="form" :model="form" :rules="rules" class="login-box">
-      <h3 class="login-title">欢迎登陆</h3>
-      <el-form-item label="账号" prop="name">
+      <h3 class="login-title">欢迎登录</h3>
+      <el-form-item label="账号" prop="username">
         <el-input
           type="text"
           placeholder="请输入用户名"
-          v-model="form.name"
+          v-model="form.username"
         ></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
@@ -17,25 +17,25 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('form')">登录</el-button>
-        <el-button type="primary" @click="submitForm('form')">注册</el-button>
+        <el-button type="primary" @click="toLogin('form')">登录</el-button>
       </el-form-item>
     </el-form>
   </div>
+  
 </template>
 
 <script>
-var that = this;
 export default {
   name: "Login",
   data() {
     return {
+      receive_msg:[],
       form: {
-        name: '',
+        username: '',
         password: '',
       },
       rules: {
-        name: [
+        username: [
           {
             required: true,
             message: '请输入用户名',
@@ -53,13 +53,18 @@ export default {
     };
   },
   methods: {
-    submitForm(formName) {
+    toLogin(formName) {
       var form = this._data.form;
+      console.log(this);
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
           console.log(form);
-          // username = this._data.form.name;
+          this.$axios.post("/login",{
+           username:form.username,
+           password:form.password
+          }).then( res => {
+         console.log(res);
+        })
           this.$router.push({name:'Home',params:{form}});
         } else {
           alert("用户名或密码错误")
@@ -69,7 +74,6 @@ export default {
     },
   },
   created(){
-    var that = this;
   }
 };
 </script>

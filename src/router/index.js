@@ -6,6 +6,9 @@ import MomentDeliver from '../views/Moment/MomentDeliver'
 import MomentFollow from '../views/Moment/MomentFollow'
 import NotFound from '../views/NotFound'
 import MyDocument from '../views/PersonalCenter/MyDocument'
+import Blog from '../views/User/Blog'
+import ClassSchedule from '../views/User/ClassSchedule'
+import Register from '../views/Register'
 
 Vue.use(VueRouter)
 
@@ -14,13 +17,19 @@ const router = new VueRouter({
   routes : [
     {
       path: '/',
-      redirect: '/login'
+      redirect: '/Home'
     },
     {
       // 登录页
       path:'/login',
       name:'Login',
       component: Login
+    },
+    {
+      // 注册页
+      path:'/register',
+      name:'Register',
+      component:Register
     },
     {
       // 主页
@@ -46,6 +55,18 @@ const router = new VueRouter({
           path: '/PersonalCenter/Mydocument',
           name: 'MyDocument',
           component: MyDocument
+        },
+        {
+          // 我的博客
+          path: '/User/Blog',
+          name: 'Blog',
+          component: Blog
+        },
+        {
+          // 我的课程表
+          path: '/User/ClassSchedule',
+          name: 'ClassSchedule',
+          component: ClassSchedule
         }
 
       ]

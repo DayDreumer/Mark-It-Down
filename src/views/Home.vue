@@ -34,31 +34,29 @@
       <el-container>
         <el-header style="text-align: right; font-size: 8px">
           <el-row :gutter="20">
-            <el-col :span="1"><el-button type="text">首页</el-button></el-col>
-            <el-col :span="1"><el-button type="text">博客</el-button></el-col>
-            <el-col :span="1"><el-button type="text">分享</el-button></el-col>
-            <el-col :span="6" :offset="6"
-              ><el-input
-                placeholder="搜索"
-                prefix-icon="el-icon-search"
-                v-model="input"
-              >
-              </el-input
-            ></el-col>
-            <el-col :span="3"
-              ><el-button type="primary" icon="el-icon-user" circle></el-button
-            ></el-col>
             <el-col :span="2"
-              ><span>{{ username }}</span>
-            </el-col>
-            <el-button-group>
+              ><el-button type="text" @click="toHome()">首页</el-button></el-col
+            >
+            <el-col :span="2"
+              ><el-button type="text" @click="toBlog()">博客</el-button></el-col
+            >
+            <el-col :span="2"
+              ><el-button type="text" @click="toSchedule()"
+                >课表</el-button
+              ></el-col
+            >
+            <el-col :span="8" v-if='isLogin'
+              ><el-button type="primary" icon="el-icon-user" circle>
+                </el-button>
+                <span>{{ $route.params.form.username }}</span>
+                </el-col>
+            <el-button-group v-if="!isLogin">
               <el-button type="primary" @click="toLogin">登录</el-button>
-              <el-button type="primary">注册</el-button>
+              <el-button type="primary" @click="toRegister">注册</el-button>
             </el-button-group>
           </el-row>
-          <!-- <el-button type="text">我的文章</el-button>
-          <el-button type="primary" icon="el-icon-user" circle></el-button> -->
         </el-header>
+
 
         <el-main>
           <router-view />
@@ -71,28 +69,61 @@
 <script>
 export default {
   name: "Home",
-  props: ["name"],
+  props: ["form"],
   data() {
     return {
-      username: 'admin', //$route.params.form.name
-
+      isLogin: false, //$route.params.form.name
     };
   },
   methods: {
+    // 跳转到登录界面
     toLogin() {
       this.$router.push("/login");
     },
+    // 跳转到注册界面
+    toRegister(){
+      this.$router.push("/register");
+    },
+    // 跳转到课程表界面
+    toSchedule() {
+      this.$router.push("/User/ClassSchedule");
+    },
+    // 跳转到博客界面
+    toBlog() {
+      this.$router.push("/User/Blog");
+    },
+    // 跳转回主界面
+    toHome() {
+      this.$router.push("/Home");
+    },
+    put(){
+      var val = this.$route.params.form;
+      console.log(val);
+    }
   },
+  mounted(){
+    let datalist = JSON.parse(JSON.stringify(this.$route.params.form));
+    console.log(datalist.username);
+    if (datalist != null){
+        this.isLogin = true
+    }
+    // this.username = datalist.name;
+    // var _name = this.username.Getter('name');
+    // console.log(_name);
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .el-header {
-  background-color: #b3c0d1;
-  color: rgb(99, 99, 99);
+  background-color: rgb(128, 128, 255);
+  color: rgb(255, 255, 255);
   line-height: 60px;
 }
 .el-aside {
   color: #333;
+}
+.el-button {
+  color: white;
 }
 </style>
