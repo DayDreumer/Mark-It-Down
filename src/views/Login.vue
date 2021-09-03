@@ -58,7 +58,7 @@ export default {
       console.log(this);
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(form);
+          // console.log(form);
           this.$axios.post("/login",{
            username:form.username,
            password:form.password

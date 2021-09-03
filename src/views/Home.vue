@@ -1,67 +1,51 @@
 <template>
   <div>
     <el-container>
-      <el-aside width="200px">
-        <el-menu :default-openeds="['1']">
-          <el-submenu index="1">
-            <template slot="title">动态</template>
-            <el-menu-item-group>
-              <el-menu-item index="1-1">
-                <router-link to="/moment/follow">我关注的</router-link>
-              </el-menu-item>
-              <el-menu-item index="1-2">
-                <router-link :to="{ name: 'MomentDeliver', params: { num: 2 } }"
-                  >我发布的</router-link
+      <el-header style="text-align: right; font-size: 12px">
+        <el-row :gutter="20">
+          <el-col :span="2"
+            ><el-button type="text" @click="toHome()">首页</el-button></el-col
+          >
+          <el-col :span="2"
+            ><el-button type="text" @click="toBlog()">博客</el-button></el-col
+          >
+          <el-col :span="2"
+            ><el-button type="text" @click="toSchedule()">课表</el-button>
+          </el-col>
+          <!-- 
+              当登录时
+          -->
+          <el-col :span="1" :offset="14" v-if="isLogin">
+            <el-dropdown>
+              <el-button type="mini" style="margin-right: 15px" circle>
+                <el-avatar :size="40" icon="el-icon-user-solid"></el-avatar>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item @click.native="toChangeAvatar"
+                  >更改头像</el-dropdown-item
                 >
-              </el-menu-item>
-            </el-menu-item-group>
-          </el-submenu>
-          <el-submenu index="2">
-            <template slot="title">个人中心</template>
-            <el-menu-item-group>
-              <el-menu-item index="2-1">我的文章</el-menu-item>
-              <el-menu-item index="2-2">课表查询</el-menu-item>
-              <el-menu-item index="2-3"
-                ><router-link to="/PersonalCenter/MyDocument"
-                  >我的资料</router-link
-                ></el-menu-item
-              >
-            </el-menu-item-group>
-          </el-submenu>
-        </el-menu>
-      </el-aside>
+                <el-dropdown-item @click.native="toSelfCenter"
+                  >个人中心</el-dropdown-item
+                >
+                <el-dropdown-item @click.native="toLogin"
+                  >退出登录</el-dropdown-item
+                >
+              </el-dropdown-menu>
+            </el-dropdown>
+          </el-col>
+          <!-- 
+              当为登录时
+            -->
+          <el-button-group v-if="!isLogin">
+            <el-button type="primary" @click="toLogin">登录</el-button>
+            <el-button type="primary" @click="toRegister">注册</el-button>
+          </el-button-group>
+        </el-row>
+      </el-header>
 
-      <el-container>
-        <el-header style="text-align: right; font-size: 8px">
-          <el-row :gutter="20">
-            <el-col :span="2"
-              ><el-button type="text" @click="toHome()">首页</el-button></el-col
-            >
-            <el-col :span="2"
-              ><el-button type="text" @click="toBlog()">博客</el-button></el-col
-            >
-            <el-col :span="2"
-              ><el-button type="text" @click="toSchedule()"
-                >课表</el-button
-              ></el-col
-            >
-            <el-col :span="8" v-if='isLogin'
-              ><el-button type="primary" icon="el-icon-user" circle>
-                </el-button>
-                <span>{{ $route.params.form.username }}</span>
-                </el-col>
-            <el-button-group v-if="!isLogin">
-              <el-button type="primary" @click="toLogin">登录</el-button>
-              <el-button type="primary" @click="toRegister">注册</el-button>
-            </el-button-group>
-          </el-row>
-        </el-header>
-
-
-        <el-main>
-          <router-view />
-        </el-main>
-      </el-container>
+      <el-main>
+        <router-view />
+      </el-main>
     </el-container>
   </div>
 </template>
@@ -69,10 +53,19 @@
 <script>
 export default {
   name: "Home",
-  props: ["form"],
+  // props: ["form"],
   data() {
     return {
-      isLogin: false, //$route.params.form.name
+      isLogin: false, //$route.params.form.username
+      username: "",
+      gridData: [
+        {
+          title: "个人中心",
+        },
+        {
+          title: "退出登录",
+        },
+      ],
     };
   },
   methods: {
@@ -81,7 +74,7 @@ export default {
       this.$router.push("/login");
     },
     // 跳转到注册界面
-    toRegister(){
+    toRegister() {
       this.$router.push("/register");
     },
     // 跳转到课程表界面
@@ -95,22 +88,31 @@ export default {
     // 跳转回主界面
     toHome() {
       this.$router.push("/Home");
+      this.this.username = "";
+      this.isLogin = false;
     },
-    put(){
-      var val = this.$route.params.form;
-      console.log(val);
+    // 跳转到个人中心
+    toSelfCenter() {
+      
+    },
+    // 跳转到更改头像界面
+    toChangeAvatar() {
+
     }
   },
-  mounted(){
-    let datalist = JSON.parse(JSON.stringify(this.$route.params.form));
-    console.log(datalist.username);
-    if (datalist != null){
-        this.isLogin = true
+  mounted() {
+    this.username = "";
+    this.isLogin = false;
+    
+    if (this.$route.params.form != null) {
+      let datalist = JSON.parse(JSON.stringify(this.$route.params.form));
+      console.log(datalist.username);
+      this.username = datalist.username;
+      if (datalist != null) {
+        this.isLogin = true;
+      }
     }
-    // this.username = datalist.name;
-    // var _name = this.username.Getter('name');
-    // console.log(_name);
-  }
+  },
 };
 </script>
 
@@ -120,10 +122,21 @@ export default {
   color: rgb(255, 255, 255);
   line-height: 60px;
 }
-.el-aside {
-  color: #333;
+.el-button--text {
+  color: rgb(255, 255, 255);
+  font-size: 20px;
 }
-.el-button {
-  color: white;
+.el-button--primary{
+  background-color: #D9B71C;
+  font-size: 20px;
+}
+.user-pop-up {
+  background-color: rgb(255, 255, 255);
+  border-color: rgb(165, 165, 165);
+  border-radius: 5px;
+  box-shadow: 0 5px 10px grey;
+}
+.el-link {
+  text-align: center;
 }
 </style>

@@ -8,7 +8,7 @@
       label-width="100px"
       class="demo-ruleForm"
     >
-    <el-form-item label="用户名" prop="username">
+      <el-form-item label="用户名" prop="username">
         <el-input
           type="text"
           v-model="ruleForm.username"
@@ -34,10 +34,11 @@
           type="text"
           v-model="ruleForm.email"
           autocomplete="off"
-        ></el-input><el-button>发送验证码</el-button>
+        ></el-input
+        ><el-button @click="sendVeriCode('ruleForm')">发送验证码</el-button>
       </el-form-item>
-      <el-form-item label="验证码" prop="veri_code">
-        <el-input v-model="ruleForm.veri_code"></el-input>
+      <el-form-item label="验证码" prop="code">
+        <el-input v-model="ruleForm.code"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="toRegister('ruleForm')"
@@ -53,10 +54,11 @@
 export default {
   name: "Register",
   data() {
-      var validateUserName = (rule, value, callback) => {
+    var validateUserName = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入用户名"));
-      } 
+      }
+      callback();
     };
     var validatePass = (rule, value, callback) => {
       if (value === "") {
@@ -80,31 +82,65 @@ export default {
     var validateEmail = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入邮箱"));
-      } 
+      }
+      callback();
     };
     return {
       ruleForm: {
-        username:"",
+        username: "",
         pass: "",
         checkPass: "",
-        email:"",
-        veri_code: "",
+        email: "",
+        code: "",
       },
       rules: {
-        username: [{ validator: validateUserName, trigger: "blur"}],
+        username: [{ validator: validateUserName, trigger: "blur" }],
         pass: [{ validator: validatePass, trigger: "blur" }],
         checkPass: [{ validator: validatePass2, trigger: "blur" }],
-        email: [{ validator: validateEmail, trigger: "blur"}]
+        email: [{ validator: validateEmail, trigger: "blur" }],
       },
     };
   },
   methods: {
-    toRegister(formName) {
+    // 发送验证码
+    sendVeriCode(formName) {
+      var form = this._data.ruleForm;
+      console.log(form);
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          /*
+          发送POST请求
+          */
+           this.$axios.post("/sendEmail",{
+           email:form.email
+          }).then( res => {
+         console.log(res);
+        })
+          alert("验证码发送成功，请注意查收");
         } else {
-          console.log("error submit!!");
+          console.log("发送失败，请稍后重试");
+          return false;
+        }
+      });
+    },
+    // 注册
+    toRegister(formName) {
+      var form = this._data.ruleForm;
+      console.log(form);
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+           this.$axios.post("/regist",{
+           username:form.username,
+           password:form.pass,
+           email:form.email,
+           code:form.code
+          }).then( res => {
+         console.log(res);
+        })
+          alert("注册成功！");
+          this.$router.push({name:'Home',params:{form}});
+        } else {
+          console.log("错误提交，请规范并完善您的信息。");
           return false;
         }
       });
