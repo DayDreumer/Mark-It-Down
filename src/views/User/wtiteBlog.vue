@@ -56,9 +56,14 @@
                 if (this.assertNotEmpty(this.article.title, "文章标题不能为空")
                     && this.assertNotEmpty(this.article.content, "文章内容不能为空")) {
                     this.dialogVisible = false;
-                    this.$axios.get("http://10.128.245.60:8008/api/upload", {
-                        title: this.article.title,
-                        content: this.article.content
+                    //multipart formdata类型
+                    let params = new FormData();
+                    params.append('title', this.title);
+                    params.append('content', this.content);
+
+                    this.$axios.post("http://10.128.245.60:8008/api/upload", params,
+                    {
+                        headers: { 'Content-Type': 'multipart/form-data' }
                     }).then(res => {
                         console.log(res);
                     })
