@@ -2,10 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/Login'
 import Home from '../views/Home'
-import MomentDeliver from '../views/Moment/MomentDeliver'
-import MomentFollow from '../views/Moment/MomentFollow'
 import NotFound from '../views/NotFound'
-import MyDocument from '../views/PersonalCenter/MyDocument'
 import Blog from '../views/User/Blog'
 import ClassSchedule from '../views/User/ClassSchedule'
 import Register from '../views/Register'
@@ -37,25 +34,6 @@ const router = new VueRouter({
       name:'Home',
       component: Home,
       children:[
-        {
-          // 关注人的动态
-          path: '/moment/follow',
-          name: 'MomentFollow',
-          component: MomentFollow
-        },
-        {
-          // 发出的动态
-          path: '/moment/deliver/:num',
-          name: 'MomentDeliver',
-          component: MomentDeliver,
-          props: true
-        },
-        {
-          // 我的资料管理
-          path: '/PersonalCenter/Mydocument',
-          name: 'MyDocument',
-          component: MyDocument
-        },
         {
           // 我的博客
           path: '/User/Blog',
