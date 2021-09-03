@@ -15,7 +15,7 @@
             <span>确定要提交吗</span>
             <span slot="footer" class="dialog-footer">
     <el-button @click="dialogVisible = false">继续编辑</el-button>
-    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+    <el-button type="primary" @click="postArticle">确 定</el-button>
   </span>
         </el-dialog>
     </div>
@@ -29,20 +29,42 @@
                 dialogVisible: false,
                 article: {
                     title: "",
-                    content: "",
-                    author: ""
+                    content: ""
                 },
+                value: ''
             };
         },
         methods: {
-            handleClose(done) {
-                this.$confirm('确认关闭？')
-                    .then(_ => {
-                        done();
-                    })
-                    .catch(_ => {
+            //判断为空
+            assertNotEmpty(target, msg) {
+                if (!target) {
+                    this.$message({
+                        message: msg,
+                        type: "warning",
                     });
+                    return false;
+                }
+                return true;
+            },
+            //关闭窗口提示
+            handleClose(done) {
+                this.$confirm('确认关闭？');
+                this.dialogVisible = false;
+            },
+            //发送博客方法
+            postArticle() {
+                if (this.assertNotEmpty(this.article.title, "文章标题不能为空")
+                    && this.assertNotEmpty(this.article.content, "文章内容不能为空")) {
+                    this.dialogVisible = false;
+                    this.$axios.get("http://10.128.245.60:8008/api/upload", {
+                        title: this.article.title,
+                        content: this.article.content
+                    }).then(res => {
+                        console.log(res);
+                    })
+                }
             }
+
         }
     }
 </script>

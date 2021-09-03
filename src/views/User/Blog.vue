@@ -46,6 +46,9 @@
             toWriteBlog(){
                 this.$router.push("/User/writeBlog");
             }
+        },
+        mounted() {
+            username="";
         }
 
     }
