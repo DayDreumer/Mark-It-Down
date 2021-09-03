@@ -9,6 +9,7 @@ import MyDocument from '../views/PersonalCenter/MyDocument'
 import Blog from '../views/User/Blog'
 import ClassSchedule from '../views/User/ClassSchedule'
 import Register from '../views/Register'
+import wtiteBlog from "../views/User/wtiteBlog";
 
 Vue.use(VueRouter)
 
@@ -67,6 +68,12 @@ const router = new VueRouter({
           path: '/User/ClassSchedule',
           name: 'ClassSchedule',
           component: ClassSchedule
+        },
+        {
+          // 写博客
+          path: '/User/writeBlog',
+          name: 'writeBlog',
+          component: wtiteBlog
         }
 
       ]

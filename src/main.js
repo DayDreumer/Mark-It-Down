@@ -7,11 +7,15 @@ import VueRouter from 'vue-router'
 import axios from "axios"
 import qs from 'qs'
 import 'element-ui/lib/theme-chalk/index.css';
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+
 
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios;
 Vue.use(VueRouter);
 Vue.use(ElementUI);
+Vue.use(mavonEditor)
 // var axios = require('axios')
 axios.defaults.baseURL = "http://10.28.216.145:8008/api"
 
