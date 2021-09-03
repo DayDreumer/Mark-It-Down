@@ -32,6 +32,7 @@
                 >
               </el-dropdown-menu>
             </el-dropdown>
+            <span>{{ userForm.username }}</span>
           </el-col>
           <!-- 
               当未登录时
@@ -66,14 +67,82 @@
                 </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
-                <el-button @click="loginTableVisible = false">取 消</el-button>
+                <el-button @click="toCancelDialog">取 消</el-button>
                 <el-button type="primary" @click="toLogin('userForm')"
                   >确 定</el-button
                 >
               </div>
             </el-dialog>
 
-            <el-button type="primary" @click="toRegister">注册</el-button>
+            <el-button type="primary" @click="showRegister">注册</el-button>
+            <!-- 
+              弹出注册Dialog
+             -->
+            <el-dialog
+              title="用户注册"
+              :visible.sync="registerTableVisble"
+              center
+            >
+              <el-form :model="userForm" ref="userForm" :rules="rules">
+                <el-form-item
+                  label="用户名"
+                  :label-width="formLabelWidth"
+                  prop="username"
+                >
+                  <el-input
+                    v-model="userForm.username"
+                    autocomplete="off"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item
+                  label="密码"
+                  :label-width="formLabelWidth"
+                  prop="password"
+                >
+                  <el-input
+                    type="password"
+                    v-model="userForm.password"
+                    autocomplete="off"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item
+                  label="确认密码"
+                  :label-width="formLabelWidth"
+                  prop="checkpassword"
+                >
+                  <el-input
+                    type="password"
+                    v-model="userForm.checkpassword"
+                    autocomplete="off"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item
+                  label="邮箱"
+                  :label-width="formLabelWidth"
+                  prop="email"
+                >
+                  <el-input
+                    v-model="userForm.email"
+                    autocomplete="off"
+                  ></el-input>
+                </el-form-item><el-button @click="sendVeriCode('userForm')">发送验证码</el-button>
+                <el-form-item
+                  label="验证码"
+                  :label-width="formLabelWidth"
+                >
+                  <el-input
+                    v-model="userForm.code"
+                    autocomplete="off"
+                  ></el-input>
+                </el-form-item>
+              </el-form>
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="toCancelDialog">取 消</el-button>
+                <el-button type="primary" @click="toRegister('userForm')"
+                  >确 定</el-button
+                >
+              </div>
+            </el-dialog>
           </el-button-group>
         </el-row>
       </el-header>
@@ -88,16 +157,35 @@
 <script>
 export default {
   name: "Home",
-  // props: ["form"],
   data() {
+    var validatePass2 = (rule, value, callback) => {
+        console.log(value);
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.userForm.password) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
+    var validateEmail = (rule, value, callback) => {
+      console.log(value);
+      if (value === "") {
+        callback(new Error("请输入邮箱"));
+      }
+      callback();
+    };
     return {
       isLogin: false, //$route.params.form.username
-      username: "",
-      loginTableVisble: false,
+      loginTableVisble: false, // 登录弹窗判断
+      registerTableVisble: false, // 注册弹窗判断
       formLabelWidth: "100px",
       userForm: {
         username: "",
         password: "",
+        checkpassword: "",
+        email: "",
+        code: "",
       },
       // 登录输入限制
       rules: {
@@ -127,6 +215,8 @@ export default {
             trigger: "blur",
           },
         ],
+        checkpassword: [{ validator: validatePass2, trigger: "blur" }],
+        email: [{ validator: validateEmail, trigger: "blur" }],
       },
       gridData: [
         {
@@ -142,12 +232,29 @@ export default {
     // 登出账户
     exit() {
       this.isLogin = false;
-      this.userForm.username = ''
-      this.userForm.password = ''
+      localStorage.clear();
     },
-    // 跳转到注册界面
-    toRegister() {
-      this.$router.push("/register");
+    // 发送验证码
+    sendVeriCode(formName) {
+      var form = this.userForm;
+      // console.log(form);
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          /*
+          发送POST请求
+          */
+           this.$axios.post("/sendEmail",{
+           email:form.email
+          }).then( res => {
+         console.log(res);
+         if(res.data.message == "成功"){
+           alert("验证码发送成功，请注意查收");
+         }else{
+           console.log("发送失败，请稍后重试");
+         }
+        })
+        }
+      });
     },
     // 跳转到课程表界面
     toSchedule() {
@@ -160,8 +267,6 @@ export default {
     // 跳转回主界面
     toHome() {
       this.$router.push("/Home");
-      this.this.username = "";
-      this.isLogin = false;
     },
     // 跳转到个人中心
     toSelfCenter() {},
@@ -170,6 +275,11 @@ export default {
     // 展示登录dialog
     showLogin() {
       this.loginTableVisble = true;
+      this.registerTableVisble = false;
+    },
+    showRegister() {
+      this.registerTableVisble = true;
+      this.loginTableVisble = false;
     },
     // 登录
     toLogin(formName) {
@@ -184,19 +294,19 @@ export default {
               password: this.userForm.password,
             })
             .then((res) => {
-              if(res.data.data == null){
+              if (res.data.data == null) {
                 alert(res.data.message);
-              }else{
-                console.log(res.data.data)
-                var msg = res.data.data
-                var pos1 = msg.search('亲爱的') + 3
-                var pos2 = msg.search('用户')
-                var pos3 = pos2 - pos1
+              } else {
+                // 截取username
+                var msg = res.data.data;
+                var pos1 = msg.search("亲爱的") + 3;
+                var pos2 = msg.search("用户");
+                var pos3 = pos2 - pos1;
                 this.userForm.username = msg.substring(pos1, pos2);
-                // console.log(msg.substring(pos1, pos2))
-                // console.log(pos1+" "+pos2);
-                this.isLogin = true
-                this.loginTableVisble = false
+
+                localStorage.setItem("username", this.userForm.username);
+                this.isLogin = true;
+                this.loginTableVisble = false;
               }
             });
         } else {
@@ -205,19 +315,48 @@ export default {
         }
       });
     },
+    // 弹出注册Dialog
+    toRegister(formName) {
+      var form = this.userForm;
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+           this.$axios.post("/regist",{
+           username:form.username,
+           password:form.password,
+           email:form.email,
+           code:form.code
+          }).then( res => {
+        //  console.log(res);
+         if(res.data.data == null){
+           alert(res.data.message);
+         }else if(res.data.message == "成功"){
+           alert(res.data.data);
+           localStorage.setItem('username',form.username);
+           this.isLogin = true;
+           this.registerTableVisble = false;
+         }
+        })} 
+      });
+    },
+    toCancelDialog() {
+      this.registerTableVisble = false;
+      this.loginTableVisble = false;
+      this.userForm.username = localStorage.getItem("username");
+      this.userForm.password = "";
+      this.userForm.checkPassword = "";
+      this.userForm.email = "";
+      this.userForm.code = "";
+    },
   },
-  mounted() {
-    this.username = "";
-    this.isLogin = false;
-
-    if (this.$route.params.form != null) {
-      let datalist = JSON.parse(JSON.stringify(this.$route.params.form));
-      console.log(datalist.username);
-      this.username = datalist.username;
-      if (datalist != null) {
-        this.isLogin = true;
-      }
+  created() {
+    var tempName = localStorage.getItem("username");
+    if (tempName != null) {
+      this.userForm.username = tempName;
+      this.isLogin = true;
+    } else {
+      this.isLogin = false;
     }
+    // let datalist = JSON.parse(JSON.stringify(this.$route.params.form));
   },
 };
 </script>

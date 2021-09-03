@@ -1,11 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from '../views/Login'
 import Home from '../views/Home'
 import NotFound from '../views/NotFound'
 import Blog from '../views/User/Blog'
 import ClassSchedule from '../views/User/ClassSchedule'
-import Register from '../views/Register'
+import DocumentManage from '../views/PersonalCenter/DocumentManage'
 
 Vue.use(VueRouter)
 
@@ -15,18 +14,6 @@ const router = new VueRouter({
     {
       path: '/',
       redirect: '/Home'
-    },
-    {
-      // 登录页
-      path:'/login',
-      name:'Login',
-      component: Login
-    },
-    {
-      // 注册页
-      path:'/register',
-      name:'Register',
-      component:Register
     },
     {
       // 主页
@@ -45,6 +32,12 @@ const router = new VueRouter({
           path: '/User/ClassSchedule',
           name: 'ClassSchedule',
           component: ClassSchedule
+        },
+        {
+          // 我的文件管理
+          path: '/PersonalCenter/DocumentManage',
+          name: 'DocumentManage',
+          component: DocumentManage
         }
 
       ]

@@ -13,7 +13,7 @@ Vue.prototype.$axios = axios;
 Vue.use(VueRouter);
 Vue.use(ElementUI);
 // var axios = require('axios')
-axios.defaults.baseURL = "http://10.28.173.235:8008/api"
+axios.defaults.baseURL = "http://10.128.245.60:8008/api"
 
 new Vue({
   el: '#app',
