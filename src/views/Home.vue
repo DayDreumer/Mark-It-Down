@@ -18,12 +18,9 @@
           <el-col :span="1" :offset="14" v-if="isLogin">
             <el-dropdown>
               <el-button type="mini" style="margin-right: 15px" circle>
-                <el-avatar :size="40" icon="el-icon-user-solid"></el-avatar>
+                <el-avatar :size="42" icon="el-icon-user-solid"></el-avatar>
               </el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item @click.native="toChangeAvatar"
-                  >更改头像</el-dropdown-item
-                >
                 <el-dropdown-item @click.native="toSelfCenter"
                   >个人中心</el-dropdown-item
                 >
@@ -147,7 +144,7 @@
       </el-header>
 
       <el-main>
-        <router-view />
+          <router-view />
       </el-main>
     </el-container>
   </div>
@@ -260,20 +257,20 @@ export default {
     },
     // 跳转到课程表界面
     toSchedule() {
-      this.$router.push("/User/ClassSchedule");
+      this.$router.push("/user/classSchedule");
     },
     // 跳转到博客界面
     toBlog() {
-      this.$router.push("/User/Blog");
+      this.$router.push("/user/blog");
     },
     // 跳转回主界面
     toHome() {
-      this.$router.push("/Home");
+      this.$router.push("/home");
     },
     // 跳转到个人中心
-    toSelfCenter() {},
-    // 跳转到更改头像界面
-    toChangeAvatar() {},
+    toSelfCenter() {
+      this.$router.push("/personalcenter/center");
+    },
     // 展示登录dialog
     showLogin() {
       this.loginTableVisble = true;
@@ -381,6 +378,7 @@ export default {
 
 <style lang="scss" scoped>
 .el-header {
+  position: relative;
   background-color: rgb(128, 128, 255);
   color: rgb(255, 255, 255);
   line-height: 60px;
@@ -410,4 +408,5 @@ export default {
   border-radius: 5px;
   box-shadow: 0 10px 20px grey;
 }
+
 </style>

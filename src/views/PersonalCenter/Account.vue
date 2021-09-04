@@ -1,13 +1,14 @@
 <template>
+    <el-card>
     <div>
-        <h2>404 Not Found</h2>
-         
+        this is account
     </div>
+    </el-card>
 </template>
 
 <script>
     export default {
-        name:'NotFound'
+        name:'Account'
     }
 </script>
 
