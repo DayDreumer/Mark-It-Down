@@ -124,12 +124,11 @@
                   <el-input
                     v-model="userForm.email"
                     autocomplete="off"
-                  ></el-input>
-                </el-form-item><el-button @click="sendVeriCode('userForm')">发送验证码</el-button>
-                <el-form-item
-                  label="验证码"
-                  :label-width="formLabelWidth"
+                  ></el-input> </el-form-item
+                ><el-button @click="sendVeriCode('userForm')"
+                  >发送验证码</el-button
                 >
+                <el-form-item label="验证码" :label-width="formLabelWidth">
                   <el-input
                     v-model="userForm.code"
                     autocomplete="off"
@@ -159,7 +158,7 @@ export default {
   name: "Home",
   data() {
     var validatePass2 = (rule, value, callback) => {
-        console.log(value);
+      console.log(value);
       if (value === "") {
         callback(new Error("请再次输入密码"));
       } else if (value !== this.userForm.password) {
@@ -232,6 +231,7 @@ export default {
     // 登出账户
     exit() {
       this.isLogin = false;
+      document.cookie = "";
       localStorage.clear();
     },
     // 发送验证码
@@ -243,16 +243,18 @@ export default {
           /*
           发送POST请求
           */
-           this.$axios.post("/sendEmail",{
-           email:form.email
-          }).then( res => {
-         console.log(res);
-         if(res.data.message == "成功"){
-           alert("验证码发送成功，请注意查收");
-         }else{
-           console.log("发送失败，请稍后重试");
-         }
-        })
+          this.$axios
+            .post("/sendEmail", {
+              email: form.email,
+            })
+            .then((res) => {
+              console.log(res);
+              if (res.data.message == "成功") {
+                alert("验证码发送成功，请注意查收");
+              } else {
+                console.log("发送失败，请稍后重试");
+              }
+            });
         }
       });
     },
@@ -303,8 +305,10 @@ export default {
                 var pos2 = msg.search("用户");
                 var pos3 = pos2 - pos1;
                 this.userForm.username = msg.substring(pos1, pos2);
-
                 localStorage.setItem("username", this.userForm.username);
+                var _date = this.generateCookie();
+                document.cookie =
+                  "username=" + this.userForm.username + "; expires=" + _date;
                 this.isLogin = true;
                 this.loginTableVisble = false;
               }
@@ -320,23 +324,37 @@ export default {
       var form = this.userForm;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-           this.$axios.post("/regist",{
-           username:form.username,
-           password:form.password,
-           email:form.email,
-           code:form.code
-          }).then( res => {
-        //  console.log(res);
-         if(res.data.data == null){
-           alert(res.data.message);
-         }else if(res.data.message == "成功"){
-           alert(res.data.data);
-           localStorage.setItem('username',form.username);
-           this.isLogin = true;
-           this.registerTableVisble = false;
-         }
-        })} 
+          this.$axios
+            .post("/regist", {
+              username: form.username,
+              password: form.password,
+              email: form.email,
+              code: form.code,
+            })
+            .then((res) => {
+              //  console.log(res);
+              if (res.data.data == null) {
+                alert(res.data.message);
+              } else if (res.data.message == "成功") {
+                alert(res.data.data);
+                localStorage.setItem("username", form.username);
+                // 生成cookie
+                var _date = this.generateCookie();
+                document.cookie =
+                  "username=" + this.userForm.username + "; expires=" + _date;
+                this.isLogin = true;
+                this.registerTableVisble = false;
+              }
+            });
+        }
       });
+    },
+    // 生成cookie
+    generateCookie() {
+      var _date = new Date();
+      _date.setDate(_date.getDate() + 3);
+      _date.toGMTString();
+      return _date;
     },
     toCancelDialog() {
       this.registerTableVisble = false;

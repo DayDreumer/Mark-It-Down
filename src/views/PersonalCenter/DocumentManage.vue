@@ -3,7 +3,8 @@
     <el-upload
       class="upload-demo"
       drag
-      action="http://10.128.245.60:8008/api/upload"
+      :data="msg"
+      action="http://10.28.173.235:8008/api/upload"
       multiple
     >
       <i class="el-icon-upload"></i>
@@ -18,6 +19,16 @@
 <script>
 export default {
   name: "DocumentManage",
+  data() {
+    return{
+      msg:{
+        username:'2019212051'
+      }
+    }
+  },
+  created(){
+    this.msg.username = localStorage.getItem('username')
+  }
 };
 </script>
 
