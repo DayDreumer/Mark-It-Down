@@ -1,12 +1,14 @@
 <template>
+    <el-card>
     <div>
-        关注动态
+        this is account
     </div>
+    </el-card>
 </template>
 
 <script>
     export default {
-        name:'MomentFollow'
+        name:'Account'
     }
 </script>
 
