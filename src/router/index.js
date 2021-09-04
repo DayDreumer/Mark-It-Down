@@ -10,6 +10,7 @@ import Blog from '../views/User/Blog'
 import ClassSchedule from '../views/User/ClassSchedule'
 import Register from '../views/Register'
 import wtiteBlog from "../views/User/wtiteBlog";
+import showBlog from "../views/User/showBlog";
 
 Vue.use(VueRouter)
 
@@ -74,8 +75,12 @@ const router = new VueRouter({
           path: '/User/writeBlog',
           name: 'writeBlog',
           component: wtiteBlog
+        },{
+          //看博客
+          path: '/User/showBlog',
+          name: 'showBlog',
+          component: showBlog
         }
-
       ]
     },
     {
