@@ -49,7 +49,7 @@ const router = new VueRouter({
           path: '/User/showBlog',
           name: 'showBlog',
           component: showBlog
-
+        },{
           // 个人中心
           path: '/personalcenter/center',
           name: 'Center',

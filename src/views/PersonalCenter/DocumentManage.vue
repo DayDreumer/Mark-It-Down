@@ -109,7 +109,7 @@ export default {
       alert("上传失败，请稍后重试。");
     },
     handleChange(file, fileList) {
-      console.log(fileList);
+      // console.log(fileList);
       this.tempfileList = fileList.slice(-2);
     },
     // 删除文件
