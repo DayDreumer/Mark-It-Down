@@ -4,9 +4,12 @@ import Home from '../views/Home'
 import NotFound from '../views/NotFound'
 import Blog from '../views/User/Blog'
 import ClassSchedule from '../views/User/ClassSchedule'
+import wtiteBlog from "../views/User/wtiteBlog";
+import showBlog from "../views/User/showBlog";
 import DocumentManage from '../views/PersonalCenter/DocumentManage'
 import Center from "../views/PersonalCenter/Center"
 import Account from "../views/PersonalCenter/Account"
+
 
 Vue.use(VueRouter)
 
@@ -36,6 +39,17 @@ const router = new VueRouter({
           component: ClassSchedule
         },
         {
+
+          // 写博客
+          path: '/User/writeBlog',
+          name: 'writeBlog',
+          component: wtiteBlog
+        },{
+          //看博客
+          path: '/User/showBlog',
+          name: 'showBlog',
+          component: showBlog
+
           // 个人中心
           path: '/personalcenter/center',
           name: 'Center',
@@ -54,8 +68,8 @@ const router = new VueRouter({
               component: Account
             }
           ]
-        }
 
+        }
       ]
     },
     {
