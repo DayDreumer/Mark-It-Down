@@ -70,7 +70,12 @@
                 <el-form-item>
                   <div class="right">
                     <el-link>
-                    <el-button type="text" class="forget-pwd" @click="toFindPwd()">忘记密码？</el-button>
+                      <el-button
+                        type="text"
+                        class="forget-pwd"
+                        @click="toFindPwd()"
+                        >忘记密码？</el-button
+                      >
                     </el-link>
                   </div>
                 </el-form-item>
@@ -80,6 +85,34 @@
                 <el-button type="primary" @click="toLogin('userForm')"
                   >确 定</el-button
                 >
+              </div>
+            </el-dialog>
+
+            <el-dialog
+              title="找回密码"
+              :visible.sync="findPwdVisble"
+              center
+              :modal-append-to-body="false"
+            >
+              <el-steps :active="findPwd.step" align-center finish-status="success">
+                <el-step
+                  title="步骤 1"
+                  description="输入注册时的邮箱"
+                >
+                </el-step>
+                <el-step
+                  title="步骤 2"
+                  description="结果显示"
+                ></el-step>
+              </el-steps>
+              <div v-if="findPwd.step == 0">
+              <el-input placeholder="请输入邮箱" prefix-icon="el-icon-message" v-model="findPwd.email">
+                </el-input>
+                <el-button @click="nextStep" align-center>下一步</el-button>
+              </div>
+              <div v-if="findPwd.step == 1">
+                <div>密码已发送至您的邮箱,请注意查收！</div>
+                <el-button @click="nextStep" align-center>下一步</el-button>
               </div>
             </el-dialog>
 
@@ -188,6 +221,7 @@ export default {
       isLogin: false, //$route.params.form.username
       loginTableVisble: false, // 登录弹窗判断
       registerTableVisble: false, // 注册弹窗判断
+      findPwdVisble: false,
       formLabelWidth: "100px",
       userForm: {
         username: "",
@@ -195,7 +229,12 @@ export default {
         checkpassword: "",
         email: "",
         code: "",
-        air: "   ",
+      },
+      findPwd: {
+        email:'',
+        step: 0,
+        message:'',
+        sendBit:false
       },
       // 登录输入限制
       rules: {
@@ -377,8 +416,35 @@ export default {
       this.userForm.email = "";
       this.userForm.code = "";
     },
-    toFindPwd(){
-      
+    toFindPwd() {
+      this.findPwdVisble = true;
+      // this.loginTableVisble = false;
+    },
+    nextStep(){
+    if(this.findPwd.step < 1){
+        if(this.findPwd.email.length > 1){
+        this.$axios.post("/findPassword",{
+        email: this.findPwd.email
+      }).then( res => {
+        this.findPwd.message = res.data.message;
+        console.log(this.findPwd.message);
+        if(this.findPwd.message == "成功"){
+           this.findPwd.sendBit = true
+           this.findPwd.step += 1;
+           }else{
+            alert("邮件发送失败，请检查格式并稍后重试！"); 
+           }
+      })
+        }
+      }
+      if( this.findPwd.sendBit ){
+        this.findPwd.step += 1;
+        this.findPwdVisble = false; 
+        this.findPwd.message = ''
+        this.findPwd.sendBit = false
+        this.findPwd.step = 0;
+        this.findPwd.email = ""
+      }
     }
   },
   created() {
@@ -430,7 +496,7 @@ export default {
 .right {
   text-align: right;
 }
-.forget-pwd{
+.forget-pwd {
   color: rgb(3, 202, 228);
   font-size: 15px;
 }
