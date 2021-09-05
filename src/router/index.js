@@ -21,6 +21,10 @@ const router = new VueRouter({
       redirect: '/Home'
     },
     {
+      path: '/personalcenter/center',
+      redirect: '/personalcenter/account'
+    },
+    {
       // 主页
       path:'/home',
       name:'Home',

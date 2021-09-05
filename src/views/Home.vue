@@ -29,7 +29,7 @@
                 >
               </el-dropdown-menu>
             </el-dropdown>
-            <span>{{ userForm.username }}</span>
+            <!-- <span>{{ userForm.username }}</span> -->
           </el-col>
           <!-- 
               当未登录时
@@ -39,7 +39,12 @@
             <!-- 
               弹出登录dialog
              -->
-            <el-dialog title="用户登录" :visible.sync="loginTableVisble" center>
+            <el-dialog
+              title="用户登录"
+              :visible.sync="loginTableVisble"
+              center
+              :modal-append-to-body="false"
+            >
               <el-form :model="userForm" ref="userForm" :rules="rules">
                 <el-form-item
                   label="用户名/邮箱"
@@ -62,6 +67,13 @@
                     autocomplete="off"
                   ></el-input>
                 </el-form-item>
+                <el-form-item>
+                  <div class="right">
+                    <el-link>
+                    <el-button type="text" class="forget-pwd" @click="toFindPwd()">忘记密码？</el-button>
+                    </el-link>
+                  </div>
+                </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
                 <el-button @click="toCancelDialog">取 消</el-button>
@@ -79,6 +91,7 @@
               title="用户注册"
               :visible.sync="registerTableVisble"
               center
+              :modal-append-to-body="false"
             >
               <el-form :model="userForm" ref="userForm" :rules="rules">
                 <el-form-item
@@ -144,7 +157,7 @@
       </el-header>
 
       <el-main>
-          <router-view />
+        <router-view />
       </el-main>
     </el-container>
   </div>
@@ -182,6 +195,7 @@ export default {
         checkpassword: "",
         email: "",
         code: "",
+        air: "   ",
       },
       // 登录输入限制
       rules: {
@@ -230,6 +244,7 @@ export default {
       this.isLogin = false;
       document.cookie = "";
       localStorage.clear();
+      this.$router.push("/home");
     },
     // 发送验证码
     sendVeriCode(formName) {
@@ -362,6 +377,9 @@ export default {
       this.userForm.email = "";
       this.userForm.code = "";
     },
+    toFindPwd(){
+      
+    }
   },
   created() {
     var tempName = localStorage.getItem("username");
@@ -407,6 +425,13 @@ export default {
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 10px 20px grey;
+  position: absolute;
 }
-
+.right {
+  text-align: right;
+}
+.forget-pwd{
+  color: rgb(3, 202, 228);
+  font-size: 15px;
+}
 </style>

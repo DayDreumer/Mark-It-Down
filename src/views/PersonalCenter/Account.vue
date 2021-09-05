@@ -1,7 +1,7 @@
 <template>
     <el-card>
     <div>
-        this is account
+        This is account
     </div>
     </el-card>
 </template>

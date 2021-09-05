@@ -2,7 +2,7 @@
   <div>
     <el-container>
       <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-        <el-menu default-active="1">
+        <el-menu default-active="index">
           <el-menu-item index="1" @click="toAccount">
             <i class="el-icon-menu"></i>
             <span slot="title">账户信息</span>
@@ -24,13 +24,18 @@
 export default {
   name: "Center",
   data() {
-    return {};
+    return {
+      index:1,
+      username:''
+    };
   },
   methods: {
     toDocumentManage() {
+      this.index = 2;
       this.$router.push("/personalcenter/documentmanage");
     },
     toAccount() {
+      this.index = 1;
       this.$router.push("/personalcenter/account");
     },
   },
