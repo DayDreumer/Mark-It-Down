@@ -32,17 +32,24 @@
                     blogid:" ",
                     picture:" ",
                     username:" "
+                },
+                msg:{
+                    localUsername:" "
                 }
             }
         },
         methods: {
+            getBlogID(){
+                this.blog.blogid=this.$route.params.blogID;
+            },
+
             async getBlog(){
 
                 this.$axios({
                     method:'post',
                     url:'http://10.28.173.235:8008/api/getBlog',
                     data:{
-                        blogid:"2021/09/04/21:29:46-919440676@qq.com"
+                        blogid:this.blog.blogid
                     }
                 }).then(res =>{
                     //将返回的数据赋值给Blog
@@ -63,7 +70,9 @@
             }
         },
         created(){
-            this.getBlog()
+            this.getBlogID();
+            this.getBlog();
+            this.msg.localUsername=localStorage.getItem("username");
         }
     }
 </script>

@@ -29,7 +29,7 @@
                 >
               </el-dropdown-menu>
             </el-dropdown>
-            <span>{{ userForm.username }}</span>
+<!--            <span>{{ userForm.username }}</span>-->
           </el-col>
           <!-- 
               当未登录时
@@ -39,7 +39,7 @@
             <!-- 
               弹出登录dialog
              -->
-            <el-dialog title="用户登录" :visible.sync="loginTableVisble" center>
+            <el-dialog title="用户登录" :visible.sync="loginTableVisble " center>
               <el-form :model="userForm" ref="userForm" :rules="rules">
                 <el-form-item
                   label="用户名/邮箱"
@@ -151,8 +151,12 @@
 </template>
 
 <script>
+  import Blog from "./User/Blog"
 export default {
   name: "Home",
+  components:{
+    Blog
+  },
   data() {
     var validatePass2 = (rule, value, callback) => {
       console.log(value);
@@ -365,6 +369,7 @@ export default {
   },
   created() {
     var tempName = localStorage.getItem("username");
+    console.log(this.$route.params.sss);
     if (tempName != null) {
       this.userForm.username = tempName;
       this.isLogin = true;
@@ -373,6 +378,10 @@ export default {
     }
     // let datalist = JSON.parse(JSON.stringify(this.$route.params.form));
   },
+  mounted() {
+    console.log(this.$route.params.sss);
+  }
+
 };
 </script>
 
