@@ -9,7 +9,9 @@
                           :defaultOpen = "prop.defaultOpen"
                           :toolbarsFlag = "prop.toolbarsFlag"
                           :editable="prop.editable"
-                          :scrollStyle="prop.scrollStyle">
+                          :scrollStyle="prop.scrollStyle"
+
+                          >
             </mavon-editor>
         </div>
         <div> {{blog.content}}</div>

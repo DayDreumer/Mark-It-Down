@@ -24,7 +24,13 @@
 
 <!--            博客显示栏-->
             <div >
-            <el-card class="box-card" v-for="(item,index) in blogCollection" :key="index">
+
+            <el-card class="box-card"
+                     v-for="(item,index) in blogCollection"
+                     :item="item"
+                     :index="index"
+                     v-if="item.isActive"
+                     :key="item.blogid">
                 <div slot="header" class="clearfix">
                     <span>{{item.username}} 发布的：</span>
                     <el-button style="float: right; padding: 3px 0" :key=1
@@ -35,6 +41,16 @@
                 </div>
             </el-card>
 
+                <el-pagination class="pager"
+                                background
+                                layout="total,  prev, pager, next, jumper"
+                                :total="this.blogLength"
+                                :hide-on-single-page="false"
+                                :page-size="5"
+                                @current-change="pageChange"
+                               :current-page.sync="currentPage"
+                               >
+                </el-pagination>
 
             </div>
         </el-main>
@@ -58,24 +74,28 @@
         name: 'Blog',
         data() {
             return {
+                currentPage:0,
                 blogPreview: {
                     title: "",
                     username: "",
                     timee:"",
-                    blogid: ""
+                    blogid: "",
+                    isActive:false
                 },
-                blogCollection: [256],
+                //blogCollection: [256],
+                blogCollection:[
+                ],
+                blogForOnePage:[
+                ],
                 blogLength:0,
                 msg: {
                     localUsername: ""
                 },
-                dialogVisible:false
+                dialogVisible:false,
+                isLoadingFinished:false
             }
         },
-        created() {
-            this.msg.localUsername = localStorage.getItem("username");
-            console.log(1);
-        },
+
         methods: {
             errorHandler() {
                 return true
@@ -94,7 +114,7 @@
                 this.$router.push({
                     name:"Home",
                     params:{
-                        sss:1
+
                     }
                 });
 
@@ -110,38 +130,76 @@
                     this.blogCollection=res;
                 })
             },
-
-            getAllBlog(){
+            //拿到后端所有可见博客
+             getAllBlog(){
                 this.$axios({
                     url: 'http://10.28.173.235:8008/api/getPublicBlogs',
                     method: 'post',
                 }).then(res=>{
-
-                    this.blogCollection=res.data;
-                    console.log("get all blogs");
+                    let temp=JSON.parse(JSON.stringify(res.data));
+                    for(var i=0;i<temp.length;i++){
+                        this.$set(this.blogCollection,i,{
+                            title: temp[i].title,
+                            username: temp[i].username,
+                            time:temp[i].time_,
+                            blogid: temp[i].blogid,
+                            isActive:false
+                        })
+                    }
+                    console.log("data get")
                     this.blogLength=this.blogCollection.length;
+                    //this.isLoadingFinished=true;
+                    this.pageChange(1);
                 })
             },
 
-            //查看博客具体内容
+            //查看单条博客具体内容
             accessBlog(item,index){
                 this.$router.push({
                     name:"showBlog",
                     params:{blogID:item.blogid}
                 })
             },
+
+            //换页时触发 拿到当前页面
+            pageChange(val){
+                console.log("当前页面号"+this.currentPage);
+                console.log(this.blogCollection);
+                var i;
+                if(val*5<=this.blogLength){
+                    i=5;
+                }
+                else{
+                    i=this.blogLength%5;
+                }
+                for(var k=0;k<this.blogLength;k++){
+                    this.blogCollection[k].isActive=false;
+                    // this.$set(this.blogCollection,k,{
+                    //     isActive:false
+                    // })
+                }
+                this.blogCollection
+                for(var j=(val-1)*5,l=0;l<i;j++,l++){
+                     this.blogCollection[j].isActive=true;
+                    // this.$set(this.blogCollection,k,{
+                    //     isActive:true
+                    // });
+                }
+                for(var k=0;k<this.blogLength;k++){
+                    console.log(this.blogCollection[k].isActive);
+                }
+            },
         },
 
+        created() {
+            this.msg.localUsername = localStorage.getItem("username");
+            this.getAllBlog();
+        },
 
         mounted() {
             //判断是否登录 不登陆无法使用博客功能
             console.log("blog start");
-            this.getAllBlog();
-            // if (!this.msg.localUsername) {
-            //     this.dialogVisible=true;
-            //
-            // }
-
+            // this.pageChange(1);
         }
     }
 
@@ -189,5 +247,9 @@
         text-align: center;
         padding-top: 100px;
         padding-left: 550px;
+    }
+
+    .pager{
+        text-align: center;
     }
 </style>

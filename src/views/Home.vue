@@ -379,7 +379,7 @@ export default {
     // let datalist = JSON.parse(JSON.stringify(this.$route.params.form));
   },
   mounted() {
-    console.log(this.$route.params.sss);
+
   }
 
 };
@@ -392,6 +392,15 @@ export default {
   color: rgb(255, 255, 255);
   line-height: 60px;
 }
+.el-main {
+  position: absolute;
+  left: 100px;
+  right: 7px;
+  top: 60px;
+  bottom: 0;
+  overflow-y: scroll;
+}
+
 .el-button--text {
   color: rgb(255, 255, 255);
   font-size: 20px;
