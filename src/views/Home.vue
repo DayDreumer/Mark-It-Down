@@ -504,8 +504,9 @@ export default {
   position: absolute;
   left: 50px;
   right: 7px;
-  top: 60px;
+  top: 70px;
   bottom: 0;
   overflow-y: scroll;
+  padding-top:10px;
   }
 </style>

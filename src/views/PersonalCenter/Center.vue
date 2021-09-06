@@ -47,7 +47,7 @@ export default {
   height: 500px;
 }
 .el-main{
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   padding-bottom: 10px;
   padding-top: 0px;
   
