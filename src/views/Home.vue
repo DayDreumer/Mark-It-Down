@@ -12,10 +12,15 @@
           <el-col :span="2"
             ><el-button type="text" @click="toSchedule()">课表</el-button>
           </el-col>
+          <el-col :span="1" :offset="14" v-if="isLogin">
+            <div class="username">
+            {{userForm.username}}
+            </div>
+          </el-col>
           <!-- 
               当登录时
           -->
-          <el-col :span="1" :offset="14" v-if="isLogin">
+          <el-col :span="1" :offset="1" v-if="isLogin">
             <el-dropdown>
               <el-button type="mini" style="margin-right: 15px" circle>
                 <el-avatar :size="42" icon="el-icon-user-solid"></el-avatar>
@@ -451,6 +456,7 @@ export default {
     var tempName = localStorage.getItem("username");
     if (tempName != null) {
       this.userForm.username = tempName;
+
       this.isLogin = true;
     } else {
       this.isLogin = false;
@@ -470,6 +476,9 @@ export default {
 .el-button--text {
   color: rgb(255, 255, 255);
   font-size: 20px;
+}
+.username{
+  font-size: 16px;
 }
 .el-button--primary {
   background-color: #d9b71c;

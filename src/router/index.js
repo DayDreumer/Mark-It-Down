@@ -9,7 +9,7 @@ import showBlog from "../views/User/showBlog";
 import DocumentManage from '../views/PersonalCenter/DocumentManage'
 import Center from "../views/PersonalCenter/Center"
 import Account from "../views/PersonalCenter/Account"
-
+import HomgePage from "../views/HomePage"
 
 Vue.use(VueRouter)
 
@@ -18,11 +18,15 @@ const router = new VueRouter({
   routes : [
     {
       path: '/',
-      redirect: '/Home'
+      redirect: '/homepage'
     },
     {
       path: '/personalcenter/center',
       redirect: '/personalcenter/account'
+    },
+    {
+      path: '/home',
+      redirect: '/homepage'
     },
     {
       // 主页
@@ -30,6 +34,12 @@ const router = new VueRouter({
       name:'Home',
       component: Home,
       children:[
+        {
+          // 首页展示
+          path:'/homepage',
+          name:"HomePage",
+          component: HomgePage
+        },
         {
           // 我的博客
           path: '/user/blog',
