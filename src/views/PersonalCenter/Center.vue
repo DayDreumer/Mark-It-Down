@@ -9,7 +9,7 @@
           </el-menu-item>
           <el-menu-item index="2" @click="toDocumentManage">
             <i class="el-icon-folder"></i>
-            <span slot="title">个人资料管理</span>
+            <span slot="title">个人文件管理</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
@@ -45,5 +45,11 @@ export default {
 <style lang="scss" scoped>
 .el-aside{
   height: 500px;
+}
+.el-main{
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  padding-top: 0px;
+  
 }
 </style>

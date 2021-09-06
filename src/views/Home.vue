@@ -500,4 +500,12 @@ export default {
   color: rgb(3, 202, 228);
   font-size: 15px;
 }
+.el-main {
+  position: absolute;
+  left: 50px;
+  right: 7px;
+  top: 60px;
+  bottom: 0;
+  overflow-y: scroll;
+  }
 </style>

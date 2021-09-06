@@ -189,13 +189,13 @@ export default {
   },
   created() {
     this.msg.username = localStorage.getItem("username");
-    console.log(this.msg.username);
+    // console.log(this.msg.username);
     this.$axios
       .post("/getAllFiles", {
         username: this.msg.username,
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         this.historyfileList = res.data;
       });
   },
