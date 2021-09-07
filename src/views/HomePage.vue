@@ -11,11 +11,12 @@
               <div @click="showMemo(data)">
               <p  :class="data.is-selected ? 'is-selected' : ''">
                 {{ data.day.split("-").slice(1).join("-") }}
+                {{ judge(data.day) ? "💛" : "" }}
                 {{ data.isSelected ? "✔️" : "" }}
               </p>
-              <p>
+              <!-- <p>
                 {{ judge(data.day) ? "💛" : "" }}
-              </p>
+              </p> -->
               </div>
             </template>
           </el-calendar>

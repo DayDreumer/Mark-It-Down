@@ -14,7 +14,7 @@
           </el-col>
           <el-col :span="1" :offset="14" v-if="isLogin">
             <div class="username">
-            {{userForm.username}}
+              {{ userForm.username }}
             </div>
           </el-col>
           <!-- 
@@ -23,7 +23,9 @@
           <el-col :span="1" :offset="1" v-if="isLogin">
             <el-dropdown>
               <el-button type="mini" style="margin-right: 15px" circle>
-                <el-avatar :size="42" icon="el-icon-user-solid"></el-avatar>
+                <el-avatar :size="42" src="https://empty">
+                  <img :src="avatarUrl" />
+                </el-avatar>
               </el-button>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item @click.native="toSelfCenter"
@@ -87,7 +89,7 @@
               </el-form>
               <div slot="footer" class="dialog-footer">
                 <el-button @click="toCancelDialog">取 消</el-button>
-                <el-button type="primary" @click="toLogin('userForm')"
+                <el-button type="success" @click="toLogin('userForm')"
                   >确 定</el-button
                 >
               </div>
@@ -99,19 +101,21 @@
               center
               :modal-append-to-body="false"
             >
-              <el-steps :active="findPwd.step" align-center finish-status="success">
-                <el-step
-                  title="步骤 1"
-                  description="输入注册时的邮箱"
-                >
+              <el-steps
+                :active="findPwd.step"
+                align-center
+                finish-status="success"
+              >
+                <el-step title="步骤 1" description="输入注册时的邮箱">
                 </el-step>
-                <el-step
-                  title="步骤 2"
-                  description="结果显示"
-                ></el-step>
+                <el-step title="步骤 2" description="结果显示"></el-step>
               </el-steps>
               <div v-if="findPwd.step == 0">
-              <el-input placeholder="请输入邮箱" prefix-icon="el-icon-message" v-model="findPwd.email">
+                <el-input
+                  placeholder="请输入邮箱"
+                  prefix-icon="el-icon-message"
+                  v-model="findPwd.email"
+                >
                 </el-input>
                 <el-button @click="nextStep" align-center>下一步</el-button>
               </div>
@@ -185,7 +189,7 @@
               </el-form>
               <div slot="footer" class="dialog-footer">
                 <el-button @click="toCancelDialog">取 消</el-button>
-                <el-button type="primary" @click="toRegister('userForm')"
+                <el-button type="success" @click="toRegister('userForm')"
                   >确 定</el-button
                 >
               </div>
@@ -228,6 +232,7 @@ export default {
       registerTableVisble: false, // 注册弹窗判断
       findPwdVisble: false,
       formLabelWidth: "100px",
+      avatarUrl: "",
       userForm: {
         username: "",
         password: "",
@@ -236,10 +241,10 @@ export default {
         code: "",
       },
       findPwd: {
-        email:'',
+        email: "",
         step: 0,
-        message:'',
-        sendBit:false
+        message: "",
+        sendBit: false,
       },
       // 登录输入限制
       rules: {
@@ -263,9 +268,9 @@ export default {
             trigger: "blur",
           },
           {
-            min: 8,
+            min: 6,
             max: 24,
-            message: "长度需在 8 到 24 个字符",
+            message: "长度需在 6 到 24 个字符",
             trigger: "blur",
           },
         ],
@@ -369,6 +374,17 @@ export default {
                 this.loginTableVisble = false;
               }
             });
+          this.$axios
+            .post("/getUserTouxiang", {
+              username: this.userForm.username,
+            })
+            .then((res) => {
+              console.log(res);
+              if (res.data != "") {
+                this.avatarUrl = res.data;
+                localStorage.setItem("avatarUrl", this.avatarUrl);
+              }
+            });
         } else {
           alert("用户名或密码错误");
           return false;
@@ -425,38 +441,39 @@ export default {
       this.findPwdVisble = true;
       // this.loginTableVisble = false;
     },
-    nextStep(){
-    if(this.findPwd.step < 1){
-        if(this.findPwd.email.length > 1){
-        this.$axios.post("/findPassword",{
-        email: this.findPwd.email
-      }).then( res => {
-        this.findPwd.message = res.data.message;
-        console.log(this.findPwd.message);
-        if(this.findPwd.message == "成功"){
-           this.findPwd.sendBit = true
-           this.findPwd.step += 1;
-           }else{
-            alert("邮件发送失败，请检查格式并稍后重试！"); 
-           }
-      })
+    nextStep() {
+      if (this.findPwd.step < 1) {
+        if (this.findPwd.email.length > 1) {
+          this.$axios
+            .post("/findPassword", {
+              email: this.findPwd.email,
+            })
+            .then((res) => {
+              this.findPwd.message = res.data.message;
+              console.log(this.findPwd.message);
+              if (this.findPwd.message == "成功") {
+                this.findPwd.sendBit = true;
+                this.findPwd.step += 1;
+              } else {
+                alert("邮件发送失败，请检查格式并稍后重试！");
+              }
+            });
         }
       }
-      if( this.findPwd.sendBit ){
+      if (this.findPwd.sendBit) {
         this.findPwd.step += 1;
-        this.findPwdVisble = false; 
-        this.findPwd.message = ''
-        this.findPwd.sendBit = false
+        this.findPwdVisble = false;
+        this.findPwd.message = "";
+        this.findPwd.sendBit = false;
         this.findPwd.step = 0;
-        this.findPwd.email = ""
+        this.findPwd.email = "";
       }
-    }
+    },
   },
   created() {
     var tempName = localStorage.getItem("username");
     if (tempName != null) {
       this.userForm.username = tempName;
-
       this.isLogin = true;
     } else {
       this.isLogin = false;
@@ -477,7 +494,7 @@ export default {
   color: rgb(255, 255, 255);
   font-size: 20px;
 }
-.username{
+.username {
   font-size: 16px;
 }
 .el-button--primary {
@@ -518,6 +535,6 @@ export default {
   width: 100%;
   height: 80%;
   overflow-y: scroll;
-  padding-top:10px;
-  }
+  padding-top: 10px;
+}
 </style>

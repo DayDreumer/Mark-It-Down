@@ -17,7 +17,7 @@ Vue.use(VueRouter);
 Vue.use(ElementUI);
 Vue.use(mavonEditor)
 // var axios = require('axios')
-axios.defaults.baseURL = "http://10.28.216.145:8080/api"
+axios.defaults.baseURL = "http://10.28.216.145:8008/api"
 
 new Vue({
   el: '#app',
