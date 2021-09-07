@@ -25,8 +25,8 @@ export default {
   name: "Center",
   data() {
     return {
-      index:1,
-      username:''
+      index: 1,
+      username: "",
     };
   },
   methods: {
@@ -43,13 +43,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-aside{
+.el-aside {
   height: 500px;
 }
-.el-main{
+.el-main {
   margin-bottom: 10px;
   padding-bottom: 10px;
   padding-top: 0px;
-  
 }
 </style>
