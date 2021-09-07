@@ -481,7 +481,7 @@ export default {
   font-size: 16px;
 }
 .el-button--primary {
-  background-color: #d9b71c;
+  background-color: #effd27a1;
   font-size: 20px;
 }
 .user-pop-up {
@@ -511,10 +511,12 @@ export default {
 }
 .el-main {
   position: absolute;
-  left: 50px;
+  left: 0px;
   right: 7px;
   top: 70px;
   bottom: 0;
+  width: 100%;
+  height: 80%;
   overflow-y: scroll;
   padding-top:10px;
   }

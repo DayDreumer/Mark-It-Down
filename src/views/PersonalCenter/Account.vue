@@ -217,9 +217,11 @@ export default {
       console.log(f);
       this.progressFlag = true;
       let formdata = new FormData();
-      formdata.append("image", f.file);
-      axios({
-        url: "",
+      formdata.append("file", f.file);
+      formdata.append("username", 'BUPP');
+      formdata.append('usage',1);
+      this.$axios({
+        url: "/upload",
         method: "post",
         data: formdata,
         headers: { "Content-Type": "multipart/form-data" },
@@ -231,7 +233,7 @@ export default {
         },
       })
         .then((res) => {
-          // this.imageUrl = res.data.url
+          this.imageUrl = res.data.url;
           console.log(res);
           if (this.progressPercent === 100) {
             this.progressFlag = false;
