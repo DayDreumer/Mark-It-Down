@@ -1,22 +1,24 @@
 <template>
-    <el-container>
+    <el-container id="container">
         <el-header height="250px">
-            <div class="demo-type">
-                <el-avatar :size="100" src="" @error="errorHandler">
-                    <!--                    头像url 请求不到时显示默认头像-->
-                    <!--                    <img src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>-->
-                </el-avatar>
-            </div>
-            <el-divider></el-divider>
-            <div id="myBlog" @click="toMyBlog">我发布的</div>
+            <el-button id="goto" type="primary" icon="el-icon-right"
+                       @click="toMyBlog">个人博客</el-button>
+<!--            <div class="demo-type">-->
+<!--                <el-avatar :size="100" src="" @error="errorHandler">-->
+<!--                    &lt;!&ndash;                    头像url 请求不到时显示默认头像&ndash;&gt;-->
+<!--                    &lt;!&ndash;                    <img src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>&ndash;&gt;-->
+<!--                </el-avatar>-->
+<!--            </div>-->
+<!--            <el-divider></el-divider>-->
+<!--            <div id="myBlog" @click="toMyBlog">我发布的</div>-->
 
-            <div >
-                <span id="startWriting"> 进行一次创作</span>
-                <el-row class="edit">
-                    <el-button type="primary" icon="el-icon-edit" circle @click="toWriteBlog"></el-button>
-                </el-row>
-            </div>
-            <el-divider></el-divider>
+<!--            <div >-->
+<!--                <span id="startWriting"> 进行一次创作</span>-->
+<!--                <el-row class="edit">-->
+<!--                    <el-button type="primary" icon="el-icon-edit" circle @click="toWriteBlog"></el-button>-->
+<!--                </el-row>-->
+<!--            </div>-->
+<!--            <el-divider></el-divider>-->
         </el-header>
 
         <el-main id="main">
@@ -197,36 +199,44 @@
 </script>
 
 <style lang="scss" scoped>
-    #myBlog {
-        color: red;
-        padding: 20px;
-        border: aqua;
+    /*#myBlog {*/
+    /*    color: red;*/
+    /*    padding: 20px;*/
+    /*    border: aqua;*/
 
+    /*}*/
+
+    /*#container{*/
+    /*    margin-left: 0px;*/
+    /*}*/
+
+    /*.P {*/
+    /*    height: 100px;*/
+    /*}*/
+
+    /*.edit {*/
+    /*    float: right;*/
+    /*}*/
+
+    /*.block{*/
+    /*    padding:200px*/
+    /*    ;*/
+    /*    height: 1000px;*/
+    /*}*/
+
+    #main{
+        background-image:url(../../assets/image/more-leaves.png);
+        /*background-size: contain;*/
     }
 
+    /*#startWriting{*/
+    /*    text-align: center;*/
+    /*    padding-top: 100px;*/
+    /*    padding-left: 550px;*/
+    /*}*/
 
-    .P {
-        height: 100px;
-    }
-
-    .edit {
-        float: right;
-    }
-
-    .block{
-        padding:200px
-        ;
-        height: 1000px;
-    }
-
-    .main{
-        height:1500px;
-    }
-
-    #startWriting{
-        text-align: center;
-        padding-top: 100px;
-        padding-left: 550px;
+    #goto{
+        float:right;
     }
 
     .pager{

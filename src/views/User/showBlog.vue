@@ -1,6 +1,8 @@
 <template>
     <!-- 文章内容块 -->
     <article>
+        <el-button id="back" type="primary" icon="el-icon-back"
+        @click="backTo">返回</el-button>
         <div style="padding:20px">
             <h1 class="blog-title" v-text="blog.title"></h1>
             <!-- 用<mavon-editor>标签显示文章内容 -->
@@ -10,11 +12,11 @@
                           :toolbarsFlag = "prop.toolbarsFlag"
                           :editable="prop.editable"
                           :scrollStyle="prop.scrollStyle"
-
+                          :readmode="true"
                           >
             </mavon-editor>
         </div>
-        <div> {{blog.content}}</div>
+
     </article>
 
 </template>
@@ -37,7 +39,7 @@
                 },
                 msg:{
                     localUsername:" "
-                }
+                },
             }
         },
         methods: {
@@ -57,6 +59,10 @@
                     //将返回的数据赋值给Blog
                     this.blog = res.data
                 })
+            },
+
+            backTo(){
+                this.$router.go(-1);
             }
         },
         computed: {

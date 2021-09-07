@@ -2,8 +2,11 @@
     <el-container>
         <!--    博客预览条目-->
         <el-header>
-
-
+            <el-tooltip>
+            <el-button id="back" type="primary" icon="el-icon-back"
+                       @click="toBlog" >博客大厅
+            </el-button>
+            </el-tooltip>
         </el-header>
         <el-main>
             <div>
@@ -14,19 +17,27 @@
                          v-if="item.isActive"
                          :key="item.blogid">
                     <div slot="header" class="clearfix">
-                        <el-switch
-                                style="display: block"
-                                v-model="item.visible"
-                                active-color="#13ce66"
-                                inactive-color="#ff4949"
-                                active-text="公开博客"
-                                inactive-text="私人博客"
-                                @change="reverseVisibility(item,index)">
-                        </el-switch>
-                        <el-button type="text" @click="deleteConfirm(item,index)">删除</el-button>
-                        <el-button style="float: right; padding: 3px 0" :key=1
-                                   type="text" @click="accessBlog(item,index)">具体内容
-                        </el-button>
+                        <el-row>
+                            <el-col :span="22">
+                                <el-switch
+                                        v-model="item.visible"
+                                        active-color="#13ce66"
+                                        inactive-color="#ff4949"
+                                        active-text="公开博客"
+                                        inactive-text="私人博客"
+                                        @change="reverseVisibility(item,index)">
+                                </el-switch>
+                            </el-col>
+                            <el-col :span="1">
+                                <el-button id="delete" type="danger" circle
+                                           icon="el-icon-delete-solid" @click="deleteConfirm(item,index)"></el-button>
+                            </el-col>
+                            <el-col :span="1">
+                                <el-button id="check" type="primary"
+                                           icon="el-icon-view" circle @click="accessBlog(item,index)">
+                                </el-button>
+                            </el-col>
+                        </el-row>
                     </div>
                     <div class="text item">
                         {{item.title}}
@@ -221,11 +232,28 @@
 </script>
 
 <style scoped>
+    #check {
+        float: right;
+
+    }
+
+    #delete {
+
+    }
+
     .pager {
         text-align: center;
     }
-    .box-card{
+
+    .box-card {
         border-radius: 20px;
-        margin:20px;
+        margin: 20px;
+    }
+    .el-main{
+        margin-left: -70px;
+        width: 100%;
+    }
+    #back{
+        float: left;
     }
 </style>
