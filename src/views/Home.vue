@@ -563,7 +563,7 @@ export default {
   top: 70px;
   bottom: 0;
   width: 100%;
-  height: 80%;
+  height: 90%;
   overflow-y: scroll;
   padding-top: 10px;
 }

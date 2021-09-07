@@ -50,11 +50,6 @@ export default {
   name: "HomePage",
   data() {
     return {
-      backgroundDiv: {
-        backgroundImage: "url(" + require("../assets/image/pic1.jpg") + ")",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "200px 200px auto",
-      },
       value: new Date(),
       showVisible: false,
       tempdate: "",
@@ -143,7 +138,7 @@ export default {
   background-size: 100% 100%;
 }
 .el-card {
-  background-color: rgb(192, 192, 192);
+  background-color: rgb(255, 255, 255);
   opacity: 0.6;
   border-color: transparent;
   padding: 5px;

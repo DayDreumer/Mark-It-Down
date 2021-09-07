@@ -1,5 +1,5 @@
 <template>
-  <div class="grid-content">
+  <div>
     <el-card>
       <div slot="header">
         <span>个人头像</span>
@@ -15,9 +15,10 @@
         :before-upload="beforeAvatarUpload"
         :http-request="uploadImg"
       >
-        <el-button type="success" plain round size="mini"
+      <el-button type="success" plain round size="mini"
           >更改头像</el-button
-        ></el-upload
+        >
+      </el-upload
       >
     </el-card>
     <el-card class="profile-entity">
@@ -248,6 +249,7 @@ export default {
     },
     modifyProfile() {
       this.profileChangeVisible = true;
+      this.pwdChangeVisible = false;
     },
     toCancel_profile() {
       this.profileChangeVisible = false;
@@ -334,9 +336,6 @@ export default {
 .el-col {
   border-radius: 4px;
 }
-.grid-content {
-  border-radius: 4px;
-}
 .head-img {
   width: 100px;
   height: 100px;
@@ -357,5 +356,8 @@ export default {
 }
 .el-card {
   margin-bottom: 5px;
+  width: 400px;
+  padding: 5px;
+   border-radius: 10px;
 }
 </style>

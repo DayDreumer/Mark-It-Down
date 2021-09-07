@@ -39,16 +39,16 @@
         <el-table
           :data="historyfileList"
           border
-          style="width: 65%"
+          style="width: 98%"
           height="250px"
         >
-          <el-table-column prop="date_" label="日期" width="200">
+          <el-table-column prop="date_" label="日期" width="120">
           </el-table-column>
-          <el-table-column prop="filename" label="文件名" width="200">
+          <el-table-column prop="filename" label="文件名" width="130">
           </el-table-column>
-          <el-table-column prop="size_" label="文件大小" width="200">
+          <el-table-column prop="size_" label="文件大小" width="100">
           </el-table-column>
-          <el-table-column label="操作" width="188">
+          <el-table-column label="操作" width="100">
             <template slot-scope="scope">
               <!-- <el-link id="download" :underline="false" :herf="tempUrl" target="_blank">
                 <el-button type="text" size="medium" @click="toDownload(scope.row)">下载</el-button>
@@ -80,6 +80,7 @@ export default {
       historyfileList: [],
       msg: {
         username: "2019212051",
+        usage: 0
       },
     };
   },
@@ -209,5 +210,11 @@ export default {
 }
 .el-scrollbar__wrap {
   overflow-x: hidden;
+}
+.el-card{
+  margin-bottom: 5px;
+  width: 500px;
+  padding: 5px;
+   border-radius: 10px;
 }
 </style>
