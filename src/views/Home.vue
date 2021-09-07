@@ -36,7 +36,6 @@
                 >
               </el-dropdown-menu>
             </el-dropdown>
-            <!-- <span>{{ userForm.username }}</span> -->
           </el-col>
           <!-- 
               当未登录时
@@ -206,8 +205,12 @@
 </template>
 
 <script>
+  import Blog from "./User/Blog"
 export default {
   name: "Home",
+  components:{
+    Blog
+  },
   data() {
     var validatePass2 = (rule, value, callback) => {
       console.log(value);
@@ -472,6 +475,7 @@ export default {
   },
   created() {
     var tempName = localStorage.getItem("username");
+    console.log(this.$route.params.sss);
     if (tempName != null) {
       this.userForm.username = tempName;
       this.isLogin = true;
@@ -480,6 +484,10 @@ export default {
     }
     // let datalist = JSON.parse(JSON.stringify(this.$route.params.form));
   },
+  mounted() {
+
+  }
+
 };
 </script>
 
@@ -490,6 +498,15 @@ export default {
   color: rgb(255, 255, 255);
   line-height: 60px;
 }
+.el-main {
+  position: absolute;
+  left: 100px;
+  right: 7px;
+  top: 60px;
+  bottom: 0;
+  overflow-y: scroll;
+}
+
 .el-button--text {
   color: rgb(255, 255, 255);
   font-size: 20px;

@@ -11,8 +11,13 @@
                 title="提示"
                 :visible.sync="dialogVisible"
                 width="30%"
+                :modal-append-to-body="false"
                 >
-            <span>确定要提交吗</span>
+            <span>请选择博客类型</span>
+            <div class="visible">
+            <el-radio v-model="radio" label="1">公开</el-radio>
+            <el-radio v-model="radio" label="2">私有</el-radio>
+            </div>
             <span slot="footer" class="dialog-footer">
     <el-button @click="dialogVisible = false">继续编辑</el-button>
     <el-button type="primary" @click="upLoad" >确 定</el-button>
@@ -23,15 +28,21 @@
 
 <script>
     export default {
-        name: "wtiteBlog",
+        name: "writeBlog",
         data() {
             return {
+                radio:"1",
                 sum:0,
                 img_file:{},
                 dialogVisible: false,
                 article: {
                     title: "",
-                    content: ""
+                    content: "",
+                    picture:[],
+                    visible:false
+                },
+                msg:{
+                    localUsername:""
                 },
                 value: '',
                 //组件选择
@@ -41,6 +52,12 @@
                 }
             };
         },
+
+        created(){
+            this.msg.localUsername = localStorage.getItem("username");
+
+        },
+
         methods: {
             //判断为空
             assertNotEmpty(target, msg) {
@@ -62,7 +79,11 @@
                 });
             },
 
-            //imgAdd
+
+            mounted(){
+                console.log(1231);
+            },
+            //图片上传函数
             $imgAdd(pos, $file){
                 // 第一步.将图片上传到服务器.
                 var formdata = new FormData();
@@ -81,6 +102,7 @@
                     var place2 = str.indexOf("}");
                     var str= str.replace("\"}","");
                     this.$refs.md.$img2Url(1+this.sum, str);
+                    this.article.picture.push(str);
                     this.sum++;
                 })
             },
@@ -90,62 +112,29 @@
             upLoad(){
                 if (this.assertNotEmpty(this.article.title, "文章标题不能为空")
                 && this.assertNotEmpty(this.article.content, "文章内容不能为空")) {
-                            console.log(this.article.content);
+                            if(this.radio=='1'){
+                                this.article.visible="1";
+                            }
+                            else{
+                                this.article.visible="0";
+                            }
                             this.$axios({
                                 url: 'http://10.28.173.235:8008/api/blogUpload',
                                 method: 'post',
                                 data: {
                                     content: this.article.content,
-                                    username: "919440676@qq.com",
+                                    username: this.msg.localUsername,
                                     title: this.article.title,
-                                    picture: ["321", "afae32"]
+                                    picture: this.article.picture,
+                                    visible: this.article.visible
                                 }
                             }).then((res) => {
                                 this.handleSubmit();
-                                this.$router.push("/User/Blog");
+                                this.$router.push("/User/myBlog");
                             })
                 }
             }
-            //上传（连续发）
-            // uploadimg($e) {
-            //     //先检查是否为空
-            //     if (this.assertNotEmpty(this.article.title, "文章标题不能为空")
-            //         && this.assertNotEmpty(this.article.content, "文章内容不能为空")) {
-            //         //识别所有图片 加入数组准备上传
-            //         //先上传图片
-            //         for (var _img in this.img_file) {
-            //             var formdata = new FormData();
-            //             formdata.append('file', this.img_file[_img]);
-            //             this.$axios({
-            //                 url: 'http://10.28.173.235:8008/api/upload',
-            //                 method: 'post',
-            //                 data: formdata,
-            //                 headers: {'Content-Type': 'multipart/form-data'},
-            //             }).then((res) => {
-            //                 var str = res.data;
-            //                 var place = str.indexOf("http");
-            //                 var str1 = str.substr(place);
-            //                 this.$refs.md.$img2Url(_img, str1);
-            //             })
-            //         }
-            //         //返回url 再次发送文字
-            //         console.log(this.article.content);
-            //         this.$axios({
-            //             url: 'http://10.28.173.235:8008/api/blogUpload',
-            //             method: 'post',
-            //             data: {
-            //                 content: this.article.content,
-            //                 username: "919440676@qq.com",
-            //                 title: this.article.title,
-            //                 picture: ["321", "afae32"]
-            //             }
-            //         }).then((res) => {
-            //             this.handleSubmit();
-            //             this.$router.push("/User/Blog");
-            //         })
-            //
-            //     }
-            // }
+
         }
     }
 </script>
@@ -182,6 +171,10 @@
         border-color: #409eff;
     }
 
+    .visible{
+        padding:30px;
+
+    }
 </style>
 
 

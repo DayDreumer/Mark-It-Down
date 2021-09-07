@@ -1,6 +1,8 @@
 <template>
     <!-- 文章内容块 -->
     <article>
+        <el-button id="back" type="primary" icon="el-icon-back"
+        @click="backTo">返回</el-button>
         <div style="padding:20px">
             <h1 class="blog-title" v-text="blog.title"></h1>
             <!-- 用<mavon-editor>标签显示文章内容 -->
@@ -9,10 +11,12 @@
                           :defaultOpen = "prop.defaultOpen"
                           :toolbarsFlag = "prop.toolbarsFlag"
                           :editable="prop.editable"
-                          :scrollStyle="prop.scrollStyle">
+                          :scrollStyle="prop.scrollStyle"
+                          :readmode="true"
+                          >
             </mavon-editor>
         </div>
-        <div> {{blog.content}}</div>
+
     </article>
 
 </template>
@@ -32,22 +36,33 @@
                     blogid:" ",
                     picture:" ",
                     username:" "
-                }
+                },
+                msg:{
+                    localUsername:" "
+                },
             }
         },
         methods: {
+            getBlogID(){
+                this.blog.blogid=this.$route.params.blogID;
+            },
+
             async getBlog(){
 
                 this.$axios({
                     method:'post',
                     url:'http://10.28.173.235:8008/api/getBlog',
                     data:{
-                        blogid:"2021/09/04/21:29:46-919440676@qq.com"
+                        blogid:this.blog.blogid
                     }
                 }).then(res =>{
                     //将返回的数据赋值给Blog
                     this.blog = res.data
                 })
+            },
+
+            backTo(){
+                this.$router.go(-1);
             }
         },
         computed: {
@@ -63,7 +78,9 @@
             }
         },
         created(){
-            this.getBlog()
+            this.getBlogID();
+            this.getBlog();
+            this.msg.localUsername=localStorage.getItem("username");
         }
     }
 </script>
