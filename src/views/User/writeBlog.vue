@@ -28,7 +28,7 @@
 
 <script>
     export default {
-        name: "wtiteBlog",
+        name: "writeBlog",
         data() {
             return {
                 radio:"1",
@@ -130,7 +130,7 @@
                                 }
                             }).then((res) => {
                                 this.handleSubmit();
-                                this.$router.push("/User/Blog");
+                                this.$router.push("/User/myBlog");
                             })
                 }
             }

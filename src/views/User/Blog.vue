@@ -8,16 +8,15 @@
                 </el-avatar>
             </div>
             <el-divider></el-divider>
-            <span id="blog">我的博客</span>
-            <span id="draft">草稿箱</span>
-            <span id="recycleBin">回收站</span>
-            <el-divider></el-divider>
+            <div id="myBlog" @click="toMyBlog">我发布的</div>
+
             <div >
                 <span id="startWriting"> 进行一次创作</span>
                 <el-row class="edit">
                     <el-button type="primary" icon="el-icon-edit" circle @click="toWriteBlog"></el-button>
                 </el-row>
             </div>
+            <el-divider></el-divider>
         </el-header>
 
         <el-main id="main">
@@ -104,6 +103,10 @@
             toWriteBlog() {
                 this.$router.push("/User/writeBlog");
             },
+            //跳转到我的博客页面
+            toMyBlog(){
+                this.$router.push("/User/myBlog");
+            },
             //未登录返回主页
             backToHome(){
                 //this.dialogVisible=false;
@@ -118,17 +121,6 @@
                     }
                 });
 
-            },
-            getMyBlog(){
-                //依据用户id拿到他的所有博客
-                this.$axios({
-                    url: 'http://10.28.173.235:8008/api/getPublicBlogs',
-                    method: 'post',
-                    data: this.msg.localUsername
-                }).then(res=>{
-                    console(res);
-                    this.blogCollection=res;
-                })
             },
             //拿到后端所有可见博客
              getAllBlog(){
@@ -199,31 +191,19 @@
         mounted() {
             //判断是否登录 不登陆无法使用博客功能
             console.log("blog start");
-            // this.pageChange(1);
         }
     }
 
 </script>
 
 <style lang="scss" scoped>
-    #blog {
+    #myBlog {
         color: red;
         padding: 20px;
+        border: aqua;
+
     }
 
-    #draft {
-        text-align: right;
-        color: red;
-        float: right;
-        width: 15%
-    }
-
-    #recycleBin {
-        text-align: right;
-        color: red;
-        float: right;
-        width: 15%
-    }
 
     .P {
         height: 100px;
@@ -251,5 +231,9 @@
 
     .pager{
         text-align: center;
+    }
+    .box-card{
+        border-radius: 20px;
+        margin:20px;
     }
 </style>
