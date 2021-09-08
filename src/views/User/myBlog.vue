@@ -16,13 +16,22 @@
                             </el-avatar>
                         </div>
 
+            <el-card class="info-card">
+                <div  class="text item">
+                    {{"已发博客:    "+this.blogLength}}
+                </div>
+                <div  class="text item">
+                    {{"已获赞数:  4"}}
+                </div>
+            </el-card>
 
-
-<!--                        <div >-->
-<!--                            <el-row class="edit">-->
-<!--                                <el-button type="primary" icon="el-icon-edit" circle @click="toWriteBlog"></el-button>-->
-<!--                            </el-row>-->
-<!--                        </div>-->
+                        <div >
+                            <el-row class="edit">
+                                <el-button type="primary" icon="el-icon-edit"  @click="toWriteBlog">
+                                    开始创作
+                                </el-button>
+                            </el-row>
+                        </div>
         </el-header>
         <el-main>
             <div>
@@ -287,9 +296,11 @@
         margin-top: 15px;
         margin-bottom: 15px;
     }
-    .el-main{
-
-        width: 100%;
+    .info-card{
+        width: 200px;
+        float:right;
+        margin-top: -100px;
+        margin-right:650px;
     }
     #back{
         margin-left: 100px;
@@ -304,5 +315,9 @@
     .demo-type{
         margin-top: 130px;
         margin-left:350px;
+    }
+    .edit{
+        float:right;
+        margin-right: 300px;
     }
 </style>
