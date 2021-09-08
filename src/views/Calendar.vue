@@ -47,7 +47,7 @@
 
 <script>
 export default {
-  name: "HomePage",
+  name: "calendar",
   data() {
     return {
       value: new Date(),

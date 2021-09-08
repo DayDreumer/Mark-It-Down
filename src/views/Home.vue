@@ -4,15 +4,15 @@
       <el-header style="text-align: right; font-size: 12px">
         <el-row :gutter="20">
           <el-col :span="2"
-            ><el-button type="text" @click="toHome()">首页</el-button></el-col
+            ><el-button type="text" @click="toBlog()">博客</el-button></el-col
           >
           <el-col :span="2"
-            ><el-button type="text" @click="toBlog()">博客</el-button></el-col
+            ><el-button type="text" @click="toCalendar()">日历</el-button></el-col
           >
           <el-col :span="2"
             ><el-button type="text" @click="toSchedule()">课表</el-button>
           </el-col>
-          <el-col :span="1" :offset="14" v-if="isLogin">
+          <el-col :span="4" :offset="11" v-if="isLogin">
             <div class="username">
               {{ userForm.username }}
             </div>
@@ -255,9 +255,9 @@ export default {
             trigger: "blur",
           },
           {
-            min: 0,
-            max: 24,
-            message: "长度需在 0 到 24 个字符",
+            min: 1,
+            max: 16,
+            message: "长度需在 1 到 16 个字符",
             trigger: "blur",
           },
         ],
@@ -321,15 +321,18 @@ export default {
     },
     // 跳转到课程表界面
     toSchedule() {
-      this.$router.push("/user/classSchedule");
+      this.$message({
+          message: '功能暂未开放，敬请期待~',
+          center: true
+        });
     },
     // 跳转到博客界面
     toBlog() {
-      this.$router.push("/user/blog");
+      this.$router.push("/home");
     },
     // 跳转回主界面
-    toHome() {
-      this.$router.push("/home");
+    toCalendar() {
+      this.$router.push("/calendar");
     },
     // 跳转到个人中心
     toSelfCenter() {
@@ -432,7 +435,7 @@ export default {
     // 生成cookie
     generateCookie() {
       var _date = new Date();
-      _date.setDate(_date.getDate() + 3);
+      _date.setDate(_date.getDate() + 1);
       _date.toGMTString();
       return _date;
     },

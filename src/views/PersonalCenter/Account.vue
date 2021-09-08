@@ -154,16 +154,16 @@ export default {
       基本信息
       */
       basicInfo: {
-        username: "2019212051",
-        password: "12345678",
-        email: "2765129970@qq.com",
-        stylishSentence: "talk is cheap, show me your code.",
+        username: "",
+        password: "",
+        email: "",
+        stylishSentence: "",
       },
       tempInfo: {
-        username: "2019212051",
+        username: "",
         password: "",
-        email: "2765129970@qq.com",
-        stylishSentence: "talk is cheap, show me your code.",
+        email: "",
+        stylishSentence: "",
       },
       profileChangeVisible: false, //个人资料dialog显示位
       pwdChangeVisible: false, //密码修改dialog显示位
