@@ -4,7 +4,17 @@
         <el-button id="back" type="primary" icon="el-icon-back"
         @click="backTo">返回</el-button>
         <div style="padding:20px">
-            <h1 class="blog-title" v-text="blog.title"></h1>
+            <el-row>
+                <el-col :span="16">
+                    <h1 class="blog-title" v-text="blog.title"></h1>
+                </el-col>
+                <el-col :span="6">
+                    <p class="blog-title" >{{'📅:'+blog.time_}}</p>
+                </el-col>
+                <el-col :span="2">
+                    <p class="blog-title"  font-weight="100">{{'👍：'+blog.count}}</p>
+                </el-col>
+            </el-row>
             <!-- 用<mavon-editor>标签显示文章内容 -->
             <mavon-editor :value="blog.content"
                           :subfield = "false"
@@ -57,7 +67,8 @@
                     }
                 }).then(res =>{
                     //将返回的数据赋值给Blog
-                    this.blog = res.data
+                    this.blog = res.data;
+                    console.log(this.blog);
                 })
             },
 
