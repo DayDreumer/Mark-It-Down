@@ -140,6 +140,7 @@
 <script>
     export default {
         name: 'Blog',
+        props:['toName'],
         data() {
             return {
                 currentPage: 0,
@@ -226,7 +227,9 @@
             },
             //跳转到我的博客页面
             toMyBlog() {
-                if (this.msg.localUsername) {
+                var nowUsername = localStorage.getItem("username");
+                if (nowUsername) {
+                    this.msg.localUsername = nowUsername;
                     this.$router.push("/User/myBlog");
                 } else {
                     this.$alert('登陆后查看个人博客', '提示', {
@@ -351,14 +354,16 @@
 
         created() {
             this.msg.localUsername = localStorage.getItem("username");
-            console.log(this.msg.localUsername);
+            // console.log(this.msg.localUsername);
             this.getAllBlog();
         },
 
         mounted() {
             //判断是否登录 不登陆无法使用博客功能
+            // this.msg.localUsername = localStorage.getItem("username");
             console.log("blog start");
-        }
+        },
+
     }
 
 </script>

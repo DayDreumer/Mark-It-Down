@@ -196,7 +196,7 @@
       </el-header>
 
       <el-main>
-        <router-view />
+        <router-view :toName="userForm.username"></router-view>
       </el-main>
     </el-container>
   </div>
