@@ -39,7 +39,7 @@
               当未登录时
             -->
           <el-button-group v-if="!isLogin">
-            <el-button type="primary" @click="showLogin">登录</el-button>
+            <el-button type="primary" @click="showLogin"  class="format">登录</el-button>
             <!-- 
               弹出登录dialog
              -->
@@ -122,7 +122,7 @@
               </div>
             </el-dialog>
 
-            <el-button type="primary" @click="showRegister">注册</el-button>
+            <el-button type="primary" @click="showRegister"  class="format">注册</el-button>
             <!-- 
               弹出注册Dialog
              -->
@@ -173,9 +173,9 @@
                   <el-input
                     v-model="userForm.email"
                     autocomplete="off"
-                  ></el-input> </el-form-item
-                ><el-button @click="sendVeriCode('userForm')"
+                  ></el-input><br/><el-button @click="sendVeriCode('userForm')" class="format-code"
                   >发送验证码</el-button
+                > </el-form-item
                 >
                 <el-form-item label="验证码" :label-width="formLabelWidth">
                   <el-input
@@ -293,7 +293,7 @@ export default {
       this.isLogin = false;
       document.cookie = "";
       localStorage.clear();
-      this.$router.push("/home");
+      this.toBlog();
     },
     // 发送验证码
     sendVeriCode(formName) {
@@ -323,7 +323,8 @@ export default {
     toSchedule() {
       this.$message({
           message: '功能暂未开放，敬请期待~',
-          center: true
+          center: true,
+          duration: 2000
         });
     },
     // 跳转到博客界面
@@ -392,6 +393,7 @@ export default {
                 localStorage.setItem("avatarUrl", this.avatarUrl);
               }
             });
+            this.$router.push("/User/Blog");
         } else {
           alert("用户名或密码错误");
           return false;
@@ -569,5 +571,12 @@ export default {
   height: 90%;
   overflow-y: scroll;
   padding-top: 10px;
+}
+.format{
+  border-radius: 10px;
+}
+.format-code{
+  border-radius: 5px;
+  background-color: rgb(247, 247, 247);
 }
 </style>

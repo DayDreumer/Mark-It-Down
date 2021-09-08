@@ -64,7 +64,15 @@ export default {
     showMemo(data) {
       // this.daily =
       this.tempdate = data.day;
+      this.daily = this.findDaily(data.day);
       this.showVisible = true;
+    },
+    findDaily(day){
+      for(var i=0;i<this.array.length;i++){
+        if(day == this.array[i].date_){
+          return this.array[i].context;
+        }
+      }
     },
     judge(day) {
       for (var i = 0; i < this.array.length; i++) {
@@ -75,10 +83,9 @@ export default {
       return false;
     },
     toSaveMemo() {
-      // if (this.username != "") {
-      //   alert("请先登录!");
-      // } else {
-      if (this.daily != "") {
+      if (this.username == "") {
+        alert("请先登录!");
+      } else if (this.daily != "") {
         this.$axios
           .post("/recordUpload", {
             username: this.username,
@@ -88,9 +95,8 @@ export default {
           .then((res) => {
             console.log("插入");
             console.log(res);
-            this.memo = "";
           });
-        this.daily = "";
+        // this.daily = "";
       } else {
         this.$axios
           .post("/deleteRecord", {
@@ -101,10 +107,18 @@ export default {
           .then((res) => {
             console.log("删除");
             console.log(res);
-            this.memo = "";
+            // this.memo = "";
           });
       }
-      // }
+      this.$axios
+        .post("/getRecord", {
+          username: this.username,
+        })
+        .then((res) => {
+          console.log(res);
+          this.array = res.data;
+          console.log(this.array[0].context);
+        });
     },
   },
   created() {

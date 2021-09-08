@@ -12,7 +12,6 @@ import myBlog from "../views/User/myBlog";
 import Calendar from "../views/Calendar"
 
 
-
 Vue.use(VueRouter)
 
 const router = new VueRouter({

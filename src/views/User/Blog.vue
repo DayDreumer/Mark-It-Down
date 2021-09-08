@@ -351,6 +351,7 @@
 
         created() {
             this.msg.localUsername = localStorage.getItem("username");
+            console.log(this.msg.localUsername);
             this.getAllBlog();
         },
 
