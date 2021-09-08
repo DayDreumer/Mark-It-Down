@@ -18,10 +18,10 @@
 
             <el-card class="info-card">
                 <div  class="text item">
-                    {{"已发博客:    "+this.blogLength}}
+                    {{"已发博客  :"+this.blogLength}}
                 </div>
                 <div  class="text item">
-                    {{"已获赞数:  4"}}
+                    {{"已获赞数 :"+this.totalThumb}}
                 </div>
             </el-card>
 
@@ -98,7 +98,8 @@
                 currentPage: 0,
                 tt: true,
                 dialogVisible: true,
-                touXiang:""
+                touXiang:"",
+                totalThumb:0
             }
         },
         created() {
@@ -221,10 +222,11 @@
                             time: temp[i].time_,
                             blogid: temp[i].blogid,
                             isActive: false,
-                            visible: k
-                        })
+                            visible: k,
+                            count:temp[i].count
+                        });
+                        this.totalThumb+=this.blogCollection[i].count;
                     }
-                    //console.log(this.blogCollection);
                     console.log("data get");
                     this.blogLength = this.blogCollection.length;
                     //this.isLoadingFinished=true;
@@ -307,7 +309,7 @@
         float: left;
     }
     #container {
-        background-image: url(../../assets/image/pexels-ricardo-esquivel-1563256.jpg);
+        background-image: url(../../assets/image/hill.jpg);
         background-size: cover;
         background-repeat: no-repeat;
     }
@@ -319,5 +321,12 @@
     .edit{
         float:right;
         margin-right: 300px;
+    }
+    .clearfix{
+        font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+        line-height: 1;
+        font-size: x-large;
+        font-style: italic;
+        padding-left: 50px;
     }
 </style>

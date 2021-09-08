@@ -55,9 +55,12 @@
                                 {{item.username}}
                                 </span>
                             </el-col>
-                            <el-col :span="2">
-                                <el-button class="thumb" type="danger" circle
-                                            icon="el-icon-thumb"@click="deleteConfirm(item,index)">
+                            <el-col  :span="2">
+                                <el-button class="thumb" type="danger" circle  v-if="item.isLiked"
+                                            icon="el-icon-thumb"@click="thumbUp(item,index)">
+                                </el-button>
+                                <el-button class="thumb" type="info" circle  v-else
+                                           icon="el-icon-thumb"@click="thumbUp(item,index)">
                                 </el-button>
                             </el-col>
                             <el-col :span="1">
@@ -82,7 +85,7 @@
 
             </div>
 
-
+            <!-- 搜索模式           博客显示栏-->
             <div v-else>
                 <el-card class="box-card"
                          v-for="(item,index) in blogCollection2"
@@ -105,9 +108,12 @@
                                 {{item.username}}
                                 </span>
                             </el-col>
-                            <el-col :span="2">
-                                <el-button class="thumb" type="danger" circle
-                                           icon="el-icon-thumb"@click="deleteConfirm(item,index)">
+                            <el-col  :span="2">
+                                <el-button class="thumb" type="danger" circle  v-if="item.isLiked"
+                                           icon="el-icon-thumb"@click="thumbUp(item,index)">
+                                </el-button>
+                                <el-button class="thumb" type="info" circle  v-else
+                                           icon="el-icon-thumb"@click="thumbUp(item,index)">
                                 </el-button>
                             </el-col>
                             <el-col :span="1">
@@ -164,7 +170,8 @@
                 isLoadingFinished: false,
                 input: "",
                 command: "时间优先",
-                searchMode: false
+                searchMode: false,
+                hotMode:false
             }
         },
 
@@ -195,7 +202,8 @@
                                 username: this.blogCollection[j].username,
                                 time: this.blogCollection[j].time,
                                 blogid: this.blogCollection[j].blogid,
-                                isActive: this.blogCollection[j].isActive
+                                isActive: this.blogCollection[j].isActive,
+                                isLiked:this.blogCollection[j].isLiked
                             });
                             i++;
                         }
@@ -256,27 +264,73 @@
                 });
 
             },
+            //判断是否喜欢
+            isLiked  (id) {
+                console.log(id);
+                var that=this;
+                that.$axios({
+                    url: 'http://10.28.173.235:8008/api/findALike',
+                    method: 'post',
+                    data:{
+                        username:that.msg.localUsername,
+                        blogid:id
+                    }
+                }).then(res=>{
+                    if(res.data){
+                       console.log('like');
+                    }
+                    else{
+                        console.log('not like');
+                    }
+                })
+            },
+            //点赞触发
+            thumbUp(item,index){
+                this.$axios({
+                    url: 'http://10.28.173.235:8008/api/giveALike',
+                    method: 'post',
+                    data:{
+                        username:this.msg.localUsername,
+                        blogid:item.blogid
+                    }
+                }).then(res=>{
+                    this.isLiked(item.blogid);
+                    item.isLiked=!item.isLiked;
+                })
+            },
             //拿到后端所有可见博客
             getAllBlog() {
                 this.searchMode=false;
+                var that=this;
                 this.$axios({
                     url: 'http://10.28.173.235:8008/api/getPublicBlogs',
                     method: 'post',
+                    data:{
+                        username:this.msg.localUsername
+                    }
                 }).then(res => {
                     let temp = JSON.parse(JSON.stringify(res.data));
                     for (var i = 0; i < temp.length; i++) {
+                       // that.$options.methods.isLiked(temp[i].blogid);
+                        //console.log(this.likeOrNot);
+                        let fubao=true;
+                        if(temp[i].isLiked=='0'){
+                            fubao=false
+                        }
                         this.$set(this.blogCollection, i, {
                             title: temp[i].title,
                             username: temp[i].username,
                             time: temp[i].time_,
                             blogid: temp[i].blogid,
                             isActive: false,
+                            isLiked:fubao
                         })
                     }
                     console.log("data get")
                     this.blogLength = this.blogCollection.length;
                     //this.isLoadingFinished=true;
                     this.pageChange(1);
+                    console.log(this.blogCollection);
                 })
             },
 
@@ -286,15 +340,23 @@
                 this.$axios({
                     url: 'http://10.28.173.235:8008/api/getPublicHotBlogs',
                     method: 'post',
+                    data:{
+                        username:this.msg.localUsername
+                    }
                 }).then(res => {
                     let temp = JSON.parse(JSON.stringify(res.data));
                     for (var i = 0; i < temp.length; i++) {
+                        let fubao=true;
+                        if(temp[i].isLiked=='0'){
+                            fubao=false
+                        }
                         this.$set(this.blogCollection, i, {
                             title: temp[i].title,
                             username: temp[i].username,
                             time: temp[i].time_,
                             blogid: temp[i].blogid,
                             isActive: false,
+                            isLiked:fubao
                         })
                     }
                     console.log("data get")
@@ -311,11 +373,12 @@
                 })
             },
 
+
             //换页时触发 拿到当前页面
             pageChange(val) {
+                this.currentPage=val;
                 if (!this.searchMode) {
                     console.log("当前页面号" + this.currentPage);
-                    console.log(this.blogCollection);
                     this.currentPage = val;
                     var i;
                     if (val * 5 <= this.blogLength) {
