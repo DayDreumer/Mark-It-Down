@@ -5,9 +5,6 @@
         <span>个人头像</span>
       </div>
       <img v-if="!progressFlag" class="head-img" :src="imageUrl" />
-      <div v-show="progressFlag" class="head-img">
-        <el-progress type="circle" :percentage="progressPercent"></el-progress>
-      </div>
       <el-upload
         class="img-btn"
         action="#"
@@ -313,7 +310,11 @@ export default {
         // 成功时
         if (res.data != "") {
           // 存取信息
-          this.imageUrl = res.data.touxiang;
+          if(res.data.touxiang != null){
+            this.imageUrl = res.data.touxiang;
+          }else{
+            this.imageUrl = "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+          }
           this.basicInfo.password = res.data.password;
           this.basicInfo.email = res.data.email;
           this.basicInfo.stylishSentence = res.data.qianming;
@@ -340,6 +341,11 @@ export default {
   width: 100px;
   height: 100px;
   border-radius: 50%;
+}
+.head-progress{
+  width: 50px;
+  height: 50px;
+  border-radius: 20px;
 }
 .text {
   font-size: 14px;
