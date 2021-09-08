@@ -89,7 +89,7 @@
                 var formdata = new FormData();
                 formdata.append('file', $file);
                 this.$axios({
-                    url: 'http://10.28.173.235:8008/api/upload',
+                    url: '/upload',
                     method: 'post',
                     data: formdata,
                     headers: { 'Content-Type': 'multipart/form-data' },
@@ -119,7 +119,7 @@
                                 this.article.visible="0";
                             }
                             this.$axios({
-                                url: 'http://10.28.173.235:8008/api/blogUpload',
+                                url: '/blogUpload',
                                 method: 'post',
                                 data: {
                                     content: this.article.content,

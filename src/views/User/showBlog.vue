@@ -61,7 +61,7 @@
 
                 this.$axios({
                     method:'post',
-                    url:'http://10.28.173.235:8008/api/getBlog',
+                    url:'/getBlog',
                     data:{
                         blogid:this.blog.blogid
                     }

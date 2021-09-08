@@ -521,6 +521,7 @@ export default {
   top: 60px;
   bottom: 0;
   overflow-y: scroll;
+  margin-top: -2px;
 }
 
 .el-button--text {
