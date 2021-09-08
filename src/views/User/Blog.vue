@@ -8,8 +8,10 @@
                     </el-button>
                 </el-tooltip>
             </div>
+            
             <!--            搜索栏-->
             <div class="input">
+                <div class="show-word">Find What You Want</div>
                 <el-input placeholder="发现更多精彩" v-model="input" size="large">
                     <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                 </el-input>
@@ -435,7 +437,6 @@
     .thumb{
 
     }
-
     #title {
         font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
         line-height: 1;
@@ -490,6 +491,12 @@
         line-height: 100px;
     }
 
+    .show-word{
+        font-family: "微软雅黑";
+        font-size: 60px;
+        text-align:center;
+        
+    }
     /*#startWriting{*/
     /*    text-align: center;*/
     /*    padding-top: 100px;*/
@@ -515,7 +522,7 @@
     }
 
     .selection {
-        margin-top: 100px;
+        margin-top: 0px;
         float: right;
         margin-right: 300px;
     }
