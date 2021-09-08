@@ -1,12 +1,28 @@
 <template>
-    <el-container>
+    <el-container id="container">
         <!--    博客预览条目-->
-        <el-header>
-            <el-tooltip>
+        <el-header height="400px">
+            <div>
+            <el-tooltip class="item" effect="dark" content="查看所有人的博客" placement="bottom">
             <el-button id="back" type="primary" icon="el-icon-back"
                        @click="toBlog" >博客大厅
             </el-button>
             </el-tooltip>
+            </div>
+                        <div class="demo-type">
+                            <el-avatar :size="200" src="this.touXiang" @error="errorHandler">
+                                <!--                    头像url 请求不到时显示默认头像-->
+                                <img src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>
+                            </el-avatar>
+                        </div>
+
+
+
+<!--                        <div >-->
+<!--                            <el-row class="edit">-->
+<!--                                <el-button type="primary" icon="el-icon-edit" circle @click="toWriteBlog"></el-button>-->
+<!--                            </el-row>-->
+<!--                        </div>-->
         </el-header>
         <el-main>
             <div>
@@ -17,8 +33,11 @@
                          v-if="item.isActive"
                          :key="item.blogid">
                     <div slot="header" class="clearfix">
+                        {{item.title}}
+                    </div>
+                    <div class="text item">
                         <el-row>
-                            <el-col :span="22">
+                            <el-col :span="21">
                                 <el-switch
                                         v-model="item.visible"
                                         active-color="#13ce66"
@@ -28,7 +47,7 @@
                                         @change="reverseVisibility(item,index)">
                                 </el-switch>
                             </el-col>
-                            <el-col :span="1">
+                            <el-col :span="2">
                                 <el-button id="delete" type="danger" circle
                                            icon="el-icon-delete-solid" @click="deleteConfirm(item,index)"></el-button>
                             </el-col>
@@ -38,9 +57,6 @@
                                 </el-button>
                             </el-col>
                         </el-row>
-                    </div>
-                    <div class="text item">
-                        {{item.title}}
                     </div>
                 </el-card>
 
@@ -55,6 +71,7 @@
                 >
                 </el-pagination>
             </div>
+
         </el-main>
     </el-container>
 </template>
@@ -70,14 +87,20 @@
                 },
                 blogLength: 0,
                 currentPage: 0,
-                tt: true
+                tt: true,
+                dialogVisible: true,
+                touXiang:""
             }
         },
         created() {
             this.msg.localUsername = localStorage.getItem("username");
             this.getMyBlog();
+            this.getUserTouxiang();
         },
         methods: {
+            errorHandler() {
+                return true
+            },
             toBlog() {
                 //返回博客主页
                 this.$router.push("/User/Blog");
@@ -85,6 +108,18 @@
             toWriteBlog() {
                 //跳转到写作页面
                 this.$router.push("/User/writeBlog");
+            },
+            getUserTouxiang(){
+                this.$axios({
+                    url: 'http://10.28.173.235:8008/api/getUserTouxiang',
+                    method: 'post',
+                    data: {
+                        username: this.msg.localUsername
+                    }
+                }).then(res=>{
+                    this.touXiang=res.data;
+                    console.log(this.touXiang);
+                })
             },
             accessBlog(item, index) {
                 //访问单条博客
@@ -180,7 +215,6 @@
                             visible: k
                         })
                     }
-                    console.log(temp);
                     //console.log(this.blogCollection);
                     console.log("data get");
                     this.blogLength = this.blogCollection.length;
@@ -247,13 +281,28 @@
 
     .box-card {
         border-radius: 20px;
-        margin: 20px;
+        border-color: #e0e0e0;
+        width: 60%;
+        margin-left: 275px;
+        margin-top: 15px;
+        margin-bottom: 15px;
     }
     .el-main{
-        margin-left: -70px;
+
         width: 100%;
     }
     #back{
+        margin-left: 100px;
         float: left;
+    }
+    #container {
+        background-image: url(../../assets/image/pexels-ricardo-esquivel-1563256.jpg);
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .demo-type{
+        margin-top: 130px;
+        margin-left:350px;
     }
 </style>
