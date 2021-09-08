@@ -121,7 +121,7 @@
             },
             getUserTouxiang(){
                 this.$axios({
-                    url: 'http://10.28.173.235:8008/api/getUserTouxiang',
+                    url: '/getUserTouxiang',
                     method: 'post',
                     data: {
                         username: this.msg.localUsername
@@ -162,7 +162,7 @@
                     this.currentPage--;
                 }
                 this.$axios({
-                    url: 'http://10.28.173.235:8008/api/deleteBlog',
+                    url: '/deleteBlog',
                     method: 'post',
                     data: {
                         blogid: item.blogid,
@@ -184,7 +184,7 @@
                 }
                 console.log(item.blogid);
                 this.$axios({
-                    url: 'http://10.28.173.235:8008/api/updateBlog',
+                    url: '/updateBlog',
                     method: 'post',
                     data: {
                         blogid: item.blogid,
@@ -202,7 +202,7 @@
             //拿到后端所有我的博客
             getMyBlog() {
                 this.$axios({
-                    url: 'http://10.28.173.235:8008/api/getAllBlogs',
+                    url: '/getAllBlogs',
                     method: 'post',
                     data: {
                         username: this.msg.localUsername
@@ -305,13 +305,17 @@
         margin-right:650px;
     }
     #back{
-        margin-left: 100px;
+        margin-left: 150px;
+        margin-top:50px;
         float: left;
     }
     #container {
         background-image: url(../../assets/image/hill.jpg);
         background-size: cover;
         background-repeat: no-repeat;
+        margin-left: -12px;
+        margin-right: -15px;
+        margin-top:-10px;
     }
 
     .demo-type{

@@ -42,8 +42,15 @@
                          :index="index"
                          v-if="item.isActive"
                          :key="item.blogid">
-                    <div slot="header" class="clearfix" id="title">
+                    <div slot="header" class="clearfix">
+                        <el-row>
+                        <el-col :span="1">
+                            <img :src="item.avatar" class="touxiang"> </img>
+                        </el-col>
+                        <el-col id="title" :span="23">
                         {{item.title}}
+                        </el-col>
+                        </el-row>
                     </div>
                     <div>
                         <el-row>
@@ -95,8 +102,19 @@
                          :index="index"
                          v-if="item.isActive"
                          :key="item.blogid">
-                    <div slot="header" class="clearfix" id="title2">
-                        {{item.title}}
+                    <div slot="header" class="clearfix" >
+                        <el-row>
+                            <el-col :span="1">
+                                <el-avatar class="touxiang" :size="50" :fit="fill" src="item.avatar" @error="errorHandler">
+                                    <img
+                                            src="http://at.alicdn.com/t/font_2799380_intmfn9557s.ttf?t=1631100941650"
+                                    />
+                                </el-avatar>
+                            </el-col>
+                            <el-col id="title2" :span="23">
+                                {{item.title}}
+                            </el-col>
+                        </el-row>
                     </div>
                     <div>
                         <el-row>
@@ -151,6 +169,7 @@
         props:['toName'],
         data() {
             return {
+                fill:"fill",
                 currentPage: 0,
                 blogPreview: {
                     title: "",
@@ -173,11 +192,15 @@
                 input: "",
                 command: "时间优先",
                 searchMode: false,
-                hotMode:false
+                hotMode:false,
+                tx:[]
             }
         },
 
         methods: {
+            errorHandler(){
+                return true;
+            },
             handleSelection(command) {
                 if (command == 'a') {
                     this.command = '时间优先';
@@ -205,7 +228,8 @@
                                 time: this.blogCollection[j].time,
                                 blogid: this.blogCollection[j].blogid,
                                 isActive: this.blogCollection[j].isActive,
-                                isLiked:this.blogCollection[j].isLiked
+                                isLiked:this.blogCollection[j].isLiked,
+                                avatar:this.blogCollection[j].avatar
                             });
                             i++;
                         }
@@ -271,7 +295,7 @@
                 console.log(id);
                 var that=this;
                 that.$axios({
-                    url: 'http://10.28.173.235:8008/api/findALike',
+                    url: '/findALike',
                     method: 'post',
                     data:{
                         username:that.msg.localUsername,
@@ -289,7 +313,7 @@
             //点赞触发
             thumbUp(item,index){
                 this.$axios({
-                    url: 'http://10.28.173.235:8008/api/giveALike',
+                    url: '/giveALike',
                     method: 'post',
                     data:{
                         username:this.msg.localUsername,
@@ -300,12 +324,35 @@
                     item.isLiked=!item.isLiked;
                 })
             },
+            //获取头像
+            // getAvatar(){
+            //     for(var i=0;i<this.blogLength;i++){
+            //         this.$axios({
+            //             url:'/getUserTouxiang',
+            //             method:'post',
+            //             data:{
+            //                 username:this.blogCollection[i].username
+            //             }
+            //         }).then((res)=>{
+            //             let temp = JSON.parse(JSON.stringify(res.data));
+            //             this.$set(this.tx,i,{
+            //                 avatar:temp
+            //             });
+            //         })
+            //     }
+            // },
+            // test(){
+            //     let xxx=JSON.parse(JSON.stringify(this.tx));
+            //     console.log(this.tx);
+            //     console.log(xxx);
+            //     console.log(this.blogCollection);
+            // },
             //拿到后端所有可见博客
             getAllBlog() {
                 this.searchMode=false;
                 var that=this;
                 this.$axios({
-                    url: 'http://10.28.173.235:8008/api/getPublicBlogs',
+                    url: '/getPublicBlogs',
                     method: 'post',
                     data:{
                         username:this.msg.localUsername
@@ -325,14 +372,18 @@
                             time: temp[i].time_,
                             blogid: temp[i].blogid,
                             isActive: false,
-                            isLiked:fubao
+                            isLiked:fubao,
+                            avatar:temp[i].touxiang
                         })
                     }
                     console.log("data get")
                     this.blogLength = this.blogCollection.length;
                     //this.isLoadingFinished=true;
-                    this.pageChange(1);
+                    let that=this;
+                    //this.getAvatar();
+                    //
                     console.log(this.blogCollection);
+                    this.pageChange(1);
                 })
             },
 
@@ -340,7 +391,7 @@
             getHotBlog(){
                 this.searchMode=false;
                 this.$axios({
-                    url: 'http://10.28.173.235:8008/api/getPublicHotBlogs',
+                    url: '/getPublicHotBlogs',
                     method: 'post',
                     data:{
                         username:this.msg.localUsername
@@ -363,6 +414,7 @@
                     }
                     console.log("data get")
                     this.blogLength = this.blogCollection.length;
+                    //this.getAvatar();
                     this.pageChange(1);
                 })
             },
@@ -443,6 +495,7 @@
         font-size: x-large;
         font-style: italic;
         padding-left: 50px;
+        padding-top: 15px;
     }
 
     #author {
@@ -463,6 +516,7 @@
         font-size: x-large;
         font-style: italic;
         padding-left: 50px;
+        padding-top: 15px;
     }
 
     #author2 {
@@ -481,6 +535,9 @@
         background-image: url(../../assets/image/pexels-ricardo-esquivel-1563256.jpg);
         background-size: cover;
         background-repeat: no-repeat;
+        margin-left: -12px;
+        margin-right: -15px;
+        margin-top:-10px;
     }
 
     .input {
@@ -505,7 +562,8 @@
 
     #goto {
         float: right;
-        margin-right: 100px;
+        margin-right: 150px;
+        margin-top: 50px;
     }
 
     .pager {
@@ -527,5 +585,14 @@
         margin-right: 300px;
     }
 
+    .el-card__header{
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
 
+    .touxiang{
+        width:100%;
+        height:100%;
+        border-radius:40%;
+    }
 </style>
