@@ -9,14 +9,11 @@
           <el-calendar class="calendar" v-model="value">
             <template slot="dateCell" slot-scope="{ date, data }">
               <div @click="showMemo(data)">
-              <p  :class="data.is-selected ? 'is-selected' : ''">
-                {{ data.day.split("-").slice(1).join("-") }}
-                {{ judge(data.day) ? "💛" : "" }}
-                {{ data.isSelected ? "✔️" : "" }}
-              </p>
-              <!-- <p>
-                {{ judge(data.day) ? "💛" : "" }}
-              </p> -->
+                <p :class="data.is - selected ? 'is-selected' : ''">
+                  {{ data.day.split("-").slice(1).join("-") }}
+                  {{ judge(data.day) ? "💛" : "" }}
+                  {{ data.isSelected ? "✔️" : "" }}
+                </p>
               </div>
             </template>
           </el-calendar>
@@ -37,7 +34,9 @@
               ></el-input>
             </div>
             <div>
-              <el-button style="float: right" @click="toSaveMemo">保存</el-button>
+              <el-button style="float: right" @click="toSaveMemo"
+                >保存</el-button
+              >
             </div>
           </el-card>
         </el-col>
@@ -48,64 +47,79 @@
 
 <script>
 export default {
-  name: "HomePage",
+  name: "calendar",
   data() {
     return {
-      backgroundDiv: {
-        backgroundImage: "url(" + require("../assets/image/pic1.jpg") + ")",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "200px 200px auto",
-      },
       value: new Date(),
       showVisible: false,
       tempdate: "",
       daily: "",
       array: [
-        { date: "2021-09-22", context: "eat" },
-        { date: "2021-09-23", context: "eat" },
-        { date: "2021-09-24", context: "eat" },
+        // { date: "2021-09-22", context: "eat" },
       ],
-      username: "2019212051"
+      username: "2019212051",
     };
   },
   methods: {
     showMemo(data) {
+      // this.daily =
       this.tempdate = data.day;
       this.showVisible = true;
-      
     },
     judge(day) {
       for (var i = 0; i < this.array.length; i++) {
-        if (day == this.array[i].date && this.array[i].context != "") {
+        if (day == this.array[i].date_ && this.array[i].context != "") {
           return true;
         }
       }
       return false;
     },
-    toSaveMemo(){
-      if(this.username != ""){
-        alert("请先登录!");
-      }else{
-      //   this.$axios.post("https://autumnfish.cn/api/user/reg",{
-      //   username: this.username,
-      //   date_ : this.tempdate,
-      //   memo : this.adily
-      // }).then( res => {
-      //   console.log(res.data);
-      //   this.memo = "";
-      // })
-      this.daily = "";
+    toSaveMemo() {
+      // if (this.username != "") {
+      //   alert("请先登录!");
+      // } else {
+      if (this.daily != "") {
+        this.$axios
+          .post("/recordUpload", {
+            username: this.username,
+            date_: this.tempdate,
+            context: this.daily,
+          })
+          .then((res) => {
+            console.log("插入");
+            console.log(res);
+            this.memo = "";
+          });
+        this.daily = "";
+      } else {
+        this.$axios
+          .post("/deleteRecord", {
+            username: this.username,
+            date_: this.tempdate,
+            context: "",
+          })
+          .then((res) => {
+            console.log("删除");
+            console.log(res);
+            this.memo = "";
+          });
       }
-    }
+      // }
+    },
   },
   created() {
     this.username = localStorage.getItem("username");
-    if(this.username != ""){
-      // this.$axios.post("",{
-      //   username: this.username,
-      // }).then( res => {
-        
-      // })
+    console.log(this.username);
+    if (this.username != "") {
+      this.$axios
+        .post("/getRecord", {
+          username: this.username,
+        })
+        .then((res) => {
+          console.log(res);
+          this.array = res.data;
+          console.log(this.array[0].context);
+        });
     }
   },
 };
@@ -124,7 +138,7 @@ export default {
   background-size: 100% 100%;
 }
 .el-card {
-  background-color: rgb(192, 192, 192);
+  background-color: rgb(255, 255, 255);
   opacity: 0.6;
   border-color: transparent;
   padding: 5px;

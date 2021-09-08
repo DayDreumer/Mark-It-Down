@@ -4,15 +4,15 @@
       <el-header style="text-align: right; font-size: 12px">
         <el-row :gutter="20">
           <el-col :span="2"
-            ><el-button type="text" @click="toHome()">首页</el-button></el-col
+            ><el-button type="text" @click="toBlog()">博客</el-button></el-col
           >
           <el-col :span="2"
-            ><el-button type="text" @click="toBlog()">博客</el-button></el-col
+            ><el-button type="text" @click="toCalendar()">日历</el-button></el-col
           >
           <el-col :span="2"
             ><el-button type="text" @click="toSchedule()">课表</el-button>
           </el-col>
-          <el-col :span="1" :offset="14" v-if="isLogin">
+          <el-col :span="4" :offset="11" v-if="isLogin">
             <div class="username">
               {{ userForm.username }}
             </div>
@@ -23,9 +23,7 @@
           <el-col :span="1" :offset="1" v-if="isLogin">
             <el-dropdown>
               <el-button type="mini" style="margin-right: 15px" circle>
-                <el-avatar :size="42" src="https://empty">
-                  <img :src="avatarUrl" />
-                </el-avatar>
+                <el-avatar :size="42" icon="el-icon-user-solid"> </el-avatar>
               </el-button>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item @click.native="toSelfCenter"
@@ -205,11 +203,11 @@
 </template>
 
 <script>
-  import Blog from "./User/Blog"
+import Blog from "./User/Blog";
 export default {
   name: "Home",
-  components:{
-    Blog
+  components: {
+    Blog,
   },
   data() {
     var validatePass2 = (rule, value, callback) => {
@@ -235,7 +233,6 @@ export default {
       registerTableVisble: false, // 注册弹窗判断
       findPwdVisble: false,
       formLabelWidth: "100px",
-      avatarUrl: "",
       userForm: {
         username: "",
         password: "",
@@ -258,9 +255,9 @@ export default {
             trigger: "blur",
           },
           {
-            min: 0,
-            max: 24,
-            message: "长度需在 0 到 24 个字符",
+            min: 1,
+            max: 16,
+            message: "长度需在 1 到 16 个字符",
             trigger: "blur",
           },
         ],
@@ -324,15 +321,18 @@ export default {
     },
     // 跳转到课程表界面
     toSchedule() {
-      this.$router.push("/user/classSchedule");
+      this.$message({
+          message: '功能暂未开放，敬请期待~',
+          center: true
+        });
     },
     // 跳转到博客界面
     toBlog() {
-      this.$router.push("/user/blog");
+      this.$router.push("/home");
     },
     // 跳转回主界面
-    toHome() {
-      this.$router.push("/home");
+    toCalendar() {
+      this.$router.push("/calendar");
     },
     // 跳转到个人中心
     toSelfCenter() {
@@ -345,24 +345,26 @@ export default {
     },
     showRegister() {
       this.registerTableVisble = true;
+      console.log(this.userForm);
       this.loginTableVisble = false;
     },
     // 登录
     toLogin(formName) {
-      // var form = this._data.form;
-      // console.log(this);
+      // 判断格式是否符合规则
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          // console.log(form);
+          // 登录
           this.$axios
             .post("/login", {
               username: this.userForm.username,
               password: this.userForm.password,
             })
             .then((res) => {
+              // 登录失败时
               if (res.data.data == null) {
                 alert(res.data.message);
               } else {
+                //登录成功时
                 // 截取username
                 var msg = res.data.data;
                 var pos1 = msg.search("亲爱的") + 3;
@@ -370,6 +372,7 @@ export default {
                 var pos3 = pos2 - pos1;
                 this.userForm.username = msg.substring(pos1, pos2);
                 localStorage.setItem("username", this.userForm.username);
+                // 生成本地cookie
                 var _date = this.generateCookie();
                 document.cookie =
                   "username=" + this.userForm.username + "; expires=" + _date;
@@ -377,14 +380,15 @@ export default {
                 this.loginTableVisble = false;
               }
             });
+          // 获取用户信息
           this.$axios
-            .post("/getUserTouxiang", {
+            .post("/getUser", {
               username: this.userForm.username,
             })
             .then((res) => {
-              console.log(res);
+              // 成功时
               if (res.data != "") {
-                this.avatarUrl = res.data;
+                // 获取头像
                 localStorage.setItem("avatarUrl", this.avatarUrl);
               }
             });
@@ -397,8 +401,11 @@ export default {
     // 弹出注册Dialog
     toRegister(formName) {
       var form = this.userForm;
+      // console.log(form);
+      // 判断格式是否符合规则
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          // 用户注册
           this.$axios
             .post("/regist", {
               username: form.username,
@@ -407,10 +414,11 @@ export default {
               code: form.code,
             })
             .then((res) => {
-              //  console.log(res);
+              // 注册失败时
               if (res.data.data == null) {
                 alert(res.data.message);
               } else if (res.data.message == "成功") {
+                // 注册成功时
                 alert(res.data.data);
                 localStorage.setItem("username", form.username);
                 // 生成cookie
@@ -427,7 +435,7 @@ export default {
     // 生成cookie
     generateCookie() {
       var _date = new Date();
-      _date.setDate(_date.getDate() + 3);
+      _date.setDate(_date.getDate() + 1);
       _date.toGMTString();
       return _date;
     },
@@ -436,24 +444,24 @@ export default {
       this.loginTableVisble = false;
       this.userForm.username = localStorage.getItem("username");
       this.userForm.password = "";
-      this.userForm.checkPassword = "";
+      this.userForm.checkpassword = "";
       this.userForm.email = "";
       this.userForm.code = "";
+      console.log(this.userForm.checkPassword);
     },
     toFindPwd() {
       this.findPwdVisble = true;
-      // this.loginTableVisble = false;
     },
     nextStep() {
       if (this.findPwd.step < 1) {
         if (this.findPwd.email.length > 1) {
+          // 找回密码
           this.$axios
             .post("/findPassword", {
               email: this.findPwd.email,
             })
             .then((res) => {
               this.findPwd.message = res.data.message;
-              console.log(this.findPwd.message);
               if (this.findPwd.message == "成功") {
                 this.findPwd.sendBit = true;
                 this.findPwd.step += 1;
@@ -475,19 +483,27 @@ export default {
   },
   created() {
     var tempName = localStorage.getItem("username");
-    console.log(this.$route.params.sss);
+    // 本地存有用户名时
     if (tempName != null) {
       this.userForm.username = tempName;
+      // 获取头像
+      this.$axios
+        .post("/getUser", {
+          username: this.userForm.username,
+        })
+        .then((res) => {
+          // 成功时
+          if (res.data != "") {
+            // 获取头像
+          } else {
+            alert("获取头像失败");
+          }
+        });
       this.isLogin = true;
     } else {
       this.isLogin = false;
     }
-    // let datalist = JSON.parse(JSON.stringify(this.$route.params.form));
   },
-  mounted() {
-
-  }
-
 };
 </script>
 
@@ -550,7 +566,7 @@ export default {
   top: 70px;
   bottom: 0;
   width: 100%;
-  height: 80%;
+  height: 90%;
   overflow-y: scroll;
   padding-top: 10px;
 }

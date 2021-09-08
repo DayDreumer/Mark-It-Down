@@ -3,14 +3,14 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home'
 import NotFound from '../views/NotFound'
 import Blog from '../views/User/Blog'
-import ClassSchedule from '../views/User/ClassSchedule'
 import wtiteBlog from "../views/User/writeBlog";
 import showBlog from "../views/User/showBlog";
 import DocumentManage from '../views/PersonalCenter/DocumentManage'
 import Center from "../views/PersonalCenter/Center"
 import Account from "../views/PersonalCenter/Account"
 import myBlog from "../views/User/myBlog";
-import HomgePage from "../views/HomePage"
+import Calendar from "../views/Calendar"
+
 
 
 Vue.use(VueRouter)
@@ -20,7 +20,7 @@ const router = new VueRouter({
   routes : [
     {
       path: '/',
-      redirect: '/homepage'
+      redirect: '/user/blog'
     },
     {
       path: '/personalcenter/center',
@@ -28,31 +28,28 @@ const router = new VueRouter({
     },
     {
       path: '/home',
-      redirect: '/homepage'
+      redirect: '/user/blog'
     },
     {
       // 主页
       path:'/home',
       name:'Home',
+      
       component: Home,
       children:[
         {
-          // 首页展示
-          path:'/homepage',
-          name:"HomePage",
-          component: HomgePage
+          // 日历展示
+          path:'/calendar',
+          name:"Calendar",
+          
+          component: Calendar
         },
         {
           // 我的博客
           path: '/user/blog',
           name: 'Blog',
+          
           component: Blog
-        },
-        {
-          // 我的课程表
-          path: '/user/classSchedule',
-          name: 'ClassSchedule',
-          component: ClassSchedule
         },
         {
           // 写博客

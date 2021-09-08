@@ -1,5 +1,5 @@
 <template>
-  <div class="grid-content">
+  <div>
     <el-card>
       <div slot="header">
         <span>个人头像</span>
@@ -15,9 +15,10 @@
         :before-upload="beforeAvatarUpload"
         :http-request="uploadImg"
       >
-        <el-button type="success" plain round size="mini"
+      <el-button type="success" plain round size="mini"
           >更改头像</el-button
-        ></el-upload
+        >
+      </el-upload
       >
     </el-card>
     <el-card class="profile-entity">
@@ -71,42 +72,42 @@
         width="30%"
         :modal-append-to-body="false"
       >
-      <!-- <div>旧密码：<el-input v-model="tempInfo.password"></el-input></div> -->
-      <el-form :model="pwdForm" ref="pwdForm" :rules="pwdrule">
-                <el-form-item
-                  label="旧密码"
-                  :label-width="formLabelWidth"
-                  prop="oldpassword"
-                >
-                  <el-input
-                  type="password"
-                    v-model="pwdForm.oldpassword"
-                    autocomplete="off"
-                  ></el-input>
-                </el-form-item>
-                <el-form-item
-                  label="新密码"
-                  :label-width="formLabelWidth"
-                  prop="newpassword"
-                >
-                  <el-input
-                    type="password"
-                    v-model="pwdForm.newpassword"
-                    autocomplete="off"
-                  ></el-input>
-                </el-form-item>
-                <el-form-item
-                  label="确认新密码"
-                  :label-width="formLabelWidth"
-                  prop="double_newpassword"
-                >
-                  <el-input
-                    type="password"
-                    v-model="pwdForm.double_newpassword"
-                    autocomplete="off"
-                  ></el-input>
-                </el-form-item>
-              </el-form>
+        <!-- <div>旧密码：<el-input v-model="tempInfo.password"></el-input></div> -->
+        <el-form :model="pwdForm" ref="pwdForm" :rules="pwdrule">
+          <el-form-item
+            label="旧密码"
+            :label-width="formLabelWidth"
+            prop="oldpassword"
+          >
+            <el-input
+              type="password"
+              v-model="pwdForm.oldpassword"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+          <el-form-item
+            label="新密码"
+            :label-width="formLabelWidth"
+            prop="newpassword"
+          >
+            <el-input
+              type="password"
+              v-model="pwdForm.newpassword"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+          <el-form-item
+            label="确认新密码"
+            :label-width="formLabelWidth"
+            prop="double_newpassword"
+          >
+            <el-input
+              type="password"
+              v-model="pwdForm.double_newpassword"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+        </el-form>
         <div class="dialog-button">
           <el-row :gutter="20">
             <el-col :span="6" :offset="3"
@@ -148,35 +149,34 @@ export default {
         */
       progressFlag: false,
       progressPercent: 0,
-      imageUrl:
-        "http://10.28.173.235:8008/2019212051/2021/09/05/19-21-00/Ole-Johan Dahl照片.jpg",
+      imageUrl: "",
       /*
       基本信息
       */
       basicInfo: {
-        username: "2019212051",
-        password: "12345678",
-        email: "2765129970@qq.com",
-        stylishSentence: "talk is cheap, show me your code.",
+        username: "",
+        password: "",
+        email: "",
+        stylishSentence: "",
       },
       tempInfo: {
-        username: "2019212051",
+        username: "",
         password: "",
-        email: "2765129970@qq.com",
-        stylishSentence: "talk is cheap, show me your code.",
+        email: "",
+        stylishSentence: "",
       },
       profileChangeVisible: false, //个人资料dialog显示位
       pwdChangeVisible: false, //密码修改dialog显示位
       /*
       修改密码
-      */ 
-      pwdForm:{
-        oldpassword:"",
-        newpassword:"",
-        double_newpassword:"",
+      */
+      pwdForm: {
+        oldpassword: "",
+        newpassword: "",
+        double_newpassword: "",
       },
       formLabelWidth: "100px",
-      pwdrule:{
+      pwdrule: {
         oldpassword: [{ validator: validateoldpwd, trigger: "blur" }],
         newpassword: [
           {
@@ -193,11 +193,11 @@ export default {
         ],
         double_newpassword: [
           {
-             validator: validatePass2,
-             trigger: "blur"
-          }
+            validator: validatePass2,
+            trigger: "blur",
+          },
         ],
-      }
+      },
     };
   },
   methods: {
@@ -218,8 +218,8 @@ export default {
       this.progressFlag = true;
       let formdata = new FormData();
       formdata.append("file", f.file);
-      formdata.append("username", 'BUPP');
-      formdata.append('usage',1);
+      formdata.append("username", this.basicInfo.username);
+      formdata.append("usage", 1);
       this.$axios({
         url: "/upload",
         method: "post",
@@ -231,21 +231,25 @@ export default {
           this.progressPercent =
             (progressEvent.loaded / progressEvent.total) * 100;
         },
-      })
-        .then((res) => {
-          this.imageUrl = res.data.url;
+      }).then((res) => {
+        if (res.data.result == "success") {
           console.log(res);
+          this.imageUrl = res.data.url;
+          localStorage.setItem("avatarUrl", this.imageUrl);
           if (this.progressPercent === 100) {
             this.progressFlag = false;
             this.progressPercent = 0;
           }
-        })
-        .then((error) => {
-          console.log(error);
-        });
+        } else {
+          alert("上传失败");
+          this.progressFlag = false;
+          this.progressPercent = 0;
+        }
+      });
     },
     modifyProfile() {
       this.profileChangeVisible = true;
+      this.pwdChangeVisible = false;
     },
     toCancel_profile() {
       this.profileChangeVisible = false;
@@ -254,14 +258,22 @@ export default {
       this.tempInfo.stylishSentence = this.basicInfo.stylishSentence;
     },
     toSubmit_profile() {
-      // this.$axios.post("",{
-      //   username:this.basicInfo.username,
-      //   newusername:this.tempInfo.username,
-      //   newemail: this.tempInfo.email,
-      //   newstylishsentence: this.tempInfo.newstylishsentence
-      // }).then( res => {
-      //   console.log(res.data);
-      // })
+      this.$axios
+        .post("/updateUser", {
+          username: this.basicInfo.username,
+          newUsername: this.tempInfo.username,
+          newEmail: this.tempInfo.email,
+          newQianming: this.tempInfo.stylishSentence,
+        })
+        .then((res) => {
+          console.log(res);
+          if(res.data.message == "成功"){
+            var temppwd = this.basicInfo.password
+            this.basicInfo = this.tempInfo
+            this.basicInfo.password = temppwd
+            this.profileChangeVisible = false;
+          }
+        });
     },
     modifyPwd() {
       this.pwdChangeVisible = true;
@@ -273,20 +285,46 @@ export default {
       this.pwdForm.double_newpassword = "";
     },
     toSubmit_pwd() {
-      this.$axios.post("/changePassword",{
-        email: this.basicInfo.email,
-        password: this.pwdForm.oldpassword,
-        newPassword: this.pwdForm.newpassword,
-        newPasswordRepeat: this.pwdForm.double_newpassword
-      }).then( res => {
-        console.log(res.data);
-        if(res.data.message == "成功"){
-          alert(res.data.data);
-          this.basicInfo.password = this.pwdForm.newpassword;
-          this.toCancel_pwd();
-        }
-      })
+      this.$axios
+        .post("/changePassword", {
+          email: this.basicInfo.email,
+          password: this.pwdForm.oldpassword,
+          newPassword: this.pwdForm.newpassword,
+          newPasswordRepeat: this.pwdForm.double_newpassword,
+        })
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.message == "成功") {
+            alert(res.data.data);
+            this.basicInfo.password = this.pwdForm.newpassword;
+            this.toCancel_pwd();
+          }
+        });
     },
+  },
+  created() {
+    this.basicInfo.username = localStorage.getItem("username");
+    // 获取个人信息
+    this.$axios
+      .post("/getUser", {
+        username: this.basicInfo.username,
+      })
+      .then((res) => {
+        // 成功时
+        if (res.data != "") {
+          // 存取信息
+          this.imageUrl = res.data.touxiang;
+          this.basicInfo.password = res.data.password;
+          this.basicInfo.email = res.data.email;
+          this.basicInfo.stylishSentence = res.data.qianming;
+          // 临时表信息存储
+          this.tempInfo.username = this.basicInfo.username;
+          this.tempInfo.email = this.basicInfo.email;
+          this.tempInfo.stylishSentence = this.basicInfo.stylishSentence;
+        } else {
+          alert("获取个人信息失败，请刷新重试");
+        }
+      });
   },
 };
 </script>
@@ -296,9 +334,6 @@ export default {
   margin-bottom: 10px;
 }
 .el-col {
-  border-radius: 4px;
-}
-.grid-content {
   border-radius: 4px;
 }
 .head-img {
@@ -321,5 +356,8 @@ export default {
 }
 .el-card {
   margin-bottom: 5px;
+  width: 400px;
+  padding: 5px;
+   border-radius: 10px;
 }
 </style>
