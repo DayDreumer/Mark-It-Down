@@ -29,8 +29,9 @@
               <el-input
                 v-model="daily"
                 type="textarea"
-                :autosize="{ minRows: 5, maxRows: 15 }"
+                :autosize="{ minRows: 10, maxRows: 15 }"
                 placeholder="记录一下日程吧"
+                resize="none"
               ></el-input>
             </div>
             <div>
@@ -83,7 +84,7 @@ export default {
       return false;
     },
     toSaveMemo() {
-      console.log(localStorage.getItem("username"));
+      // console.log(localStorage.getItem("username"));
       if (localStorage.getItem("username") == null) {
         alert("请先登录!");
       } else if (this.daily != "") {
