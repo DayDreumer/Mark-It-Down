@@ -56,9 +56,8 @@ export default {
       tempdate: "",
       daily: "",
       array: [
-        // { date: "2021-09-22", context: "eat" },
       ],
-      username: "2019212051",
+      username: "",
     };
   },
   methods: {
@@ -84,7 +83,6 @@ export default {
       return false;
     },
     toSaveMemo() {
-      // console.log(localStorage.getItem("username"));
       if (localStorage.getItem("username") == null) {
         alert("请先登录!");
       } else if (this.daily != "") {

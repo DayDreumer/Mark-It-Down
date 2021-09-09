@@ -292,7 +292,13 @@ export default {
     exit() {
       this.isLogin = false;
       document.cookie = "";
+      this.userForm.username = "";
+      this.userForm.password = "";
+      this.userForm.checkpassword = "";
+      this.userForm.email = "";
+      this.userForm.code = "";
       localStorage.clear();
+      
       this.toBlog();
     },
     // 发送验证码

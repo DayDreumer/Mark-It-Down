@@ -17,7 +17,7 @@
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         <div class="el-upload__tip" slot="tip">
-          只能上传jpg/png文件，且不超过500kb
+          图片只能上传jpg文件，且不超过500kb，文件建议不大于20MB
         </div>
       </el-upload>
       <el-dialog
@@ -79,7 +79,7 @@ export default {
       tempfileList: [],
       historyfileList: [],
       msg: {
-        username: "2019212051",
+        username: "",
         usage: 0
       },
     };
@@ -164,11 +164,6 @@ export default {
             message: "已取消删除",
           });
         });
-    },
-    // 下载文件
-    toDownload(row) {
-      var v = document.getElementById("download"); //获取html的el-link标签
-      v.href = row.url; //赋值到href属性
     },
     toJump(row) {
       var filename = row.filename;
