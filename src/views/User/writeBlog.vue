@@ -133,6 +133,11 @@
                             }).then((res) => {
                                 this.handleSubmit();
                                 this.$router.push("/User/myBlog");
+                            }).catch((error)=>{
+                                this.$message({
+                                    message: "文章长度超出限制",
+                                    type: "warning",
+                                });
                             })
                 }
             }
