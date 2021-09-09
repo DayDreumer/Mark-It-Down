@@ -199,16 +199,17 @@ export default {
   },
   methods: {
     beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
+      let types = ['image/jpeg', 'image/jpg', 'image/png'];
+      const isTrue = types.includes(file.type);;
       const isLt2M = file.size / 1024 / 1024 < 2;
 
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+      if (!isTrue) {
+        this.$message.error("上传头像图片只能是 JPG 、PNG格式!");
       }
       if (!isLt2M) {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
-      return isJPG && isLt2M;
+      return isTrue && isLt2M;
     },
     uploadImg(f) {
       console.log(f);

@@ -83,7 +83,8 @@ export default {
       return false;
     },
     toSaveMemo() {
-      if (this.username == "") {
+      console.log(localStorage.getItem("username"));
+      if (localStorage.getItem("username") == null) {
         alert("请先登录!");
       } else if (this.daily != "") {
         this.$axios
@@ -96,7 +97,15 @@ export default {
             console.log("插入");
             console.log(res);
           });
-        // this.daily = "";
+        this.$axios
+        .post("/getRecord", {
+          username: this.username,
+        })
+        .then((res) => {
+          console.log(res);
+          this.array = res.data;
+          console.log(this.array[0].context);
+        });
       } else {
         this.$axios
           .post("/deleteRecord", {
@@ -109,8 +118,7 @@ export default {
             console.log(res);
             // this.memo = "";
           });
-      }
-      this.$axios
+          this.$axios
         .post("/getRecord", {
           username: this.username,
         })
@@ -119,12 +127,13 @@ export default {
           this.array = res.data;
           console.log(this.array[0].context);
         });
+      }
     },
   },
   created() {
     this.username = localStorage.getItem("username");
     console.log(this.username);
-    if (this.username != "") {
+    if (localStorage.getItem("username") != null) {
       this.$axios
         .post("/getRecord", {
           username: this.username,
