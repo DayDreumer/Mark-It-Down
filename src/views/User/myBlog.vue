@@ -172,6 +172,7 @@
                 }).then(res => {
                     this.blogCollection.splice(index, 1);
                     this.blogLength--;
+                    this.totalThumb-=item.count;
                     this.pageReload(this.currentPage);
                 })
             },
