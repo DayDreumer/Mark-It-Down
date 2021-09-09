@@ -23,6 +23,8 @@
                           :editable="prop.editable"
                           :scrollStyle="prop.scrollStyle"
                           :readmode="true"
+                          :ishljs="true"
+                          :codeStyle="codeStyle"
                           >
             </mavon-editor>
         </div>
