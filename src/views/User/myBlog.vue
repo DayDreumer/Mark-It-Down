@@ -317,6 +317,7 @@
         margin-left: -12px;
         margin-right: -15px;
         margin-top:-10px;
+        margin-bottom: -20px;
     }
 
     .demo-type{
