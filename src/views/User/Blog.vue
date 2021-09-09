@@ -105,11 +105,7 @@
                     <div slot="header" class="clearfix" >
                         <el-row>
                             <el-col :span="1">
-                                <el-avatar class="touxiang" :size="50" :fit="fill" src="item.avatar" @error="errorHandler">
-                                    <img
-                                            src="http://at.alicdn.com/t/font_2799380_intmfn9557s.ttf?t=1631100941650"
-                                    />
-                                </el-avatar>
+                                <img :src="item.avatar" class="touxiang"> </img>
                             </el-col>
                             <el-col id="title2" :span="23">
                                 {{item.title}}
@@ -324,29 +320,22 @@
                     item.isLiked=!item.isLiked;
                 })
             },
-            //获取头像
-            // getAvatar(){
-            //     for(var i=0;i<this.blogLength;i++){
-            //         this.$axios({
-            //             url:'/getUserTouxiang',
-            //             method:'post',
-            //             data:{
-            //                 username:this.blogCollection[i].username
-            //             }
-            //         }).then((res)=>{
-            //             let temp = JSON.parse(JSON.stringify(res.data));
-            //             this.$set(this.tx,i,{
-            //                 avatar:temp
-            //             });
-            //         })
-            //     }
-            // },
-            // test(){
-            //     let xxx=JSON.parse(JSON.stringify(this.tx));
-            //     console.log(this.tx);
-            //     console.log(xxx);
-            //     console.log(this.blogCollection);
-            // },
+
+            //默认头像
+            getDefaultAvatar(){
+                for(var i=0;i<this.blogLength;i++){
+                    if(!this.blogCollection[i].avatar){
+                        this.blogCollection[i].avatar="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic26.nipic.com%2F20130120%2F10235137_175008341118_2.jpg&refer=http%3A%2F%2Fpic26.nipic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1633756447&t=1e22fda1f1ba5c0146b87e6553b7834e";
+                    }
+                }
+            },
+
+            test(){
+                let xxx=JSON.parse(JSON.stringify(this.tx));
+                console.log(this.tx);
+                console.log(xxx);
+                console.log(this.blogCollection);
+            },
             //拿到后端所有可见博客
             getAllBlog() {
                 this.searchMode=false;
@@ -383,6 +372,7 @@
                     //this.getAvatar();
                     //
                     console.log(this.blogCollection);
+                    this.getDefaultAvatar();
                     this.pageChange(1);
                 })
             },
@@ -409,12 +399,13 @@
                             time: temp[i].time_,
                             blogid: temp[i].blogid,
                             isActive: false,
-                            isLiked:fubao
+                            isLiked:fubao,
+                            avatar:temp[i].touxiang
                         })
                     }
                     console.log("data get")
                     this.blogLength = this.blogCollection.length;
-                    //this.getAvatar();
+                    this.getDefaultAvatar();
                     this.pageChange(1);
                 })
             },
@@ -593,6 +584,8 @@
     .touxiang{
         width:100%;
         height:100%;
-        border-radius:40%;
+        width:50px;
+        height: 50px;
+        border-radius:100%;
     }
 </style>

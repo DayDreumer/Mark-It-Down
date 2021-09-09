@@ -9,10 +9,10 @@
             </el-button>
             </el-tooltip>
             </div>
-                        <div class="demo-type">
-                            <el-avatar :size="200" src="this.touXiang" @error="errorHandler">
+                        <div  class="demo-type">
+                            <el-avatar :size="200" :src="touXiang[0].avatar" @error="errorHandler">
                                 <!--                    头像url 请求不到时显示默认头像-->
-                                <img src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>
+                                <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic26.nipic.com%2F20130120%2F10235137_175008341118_2.jpg&refer=http%3A%2F%2Fpic26.nipic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1633756447&t=1e22fda1f1ba5c0146b87e6553b7834e"/>
                             </el-avatar>
                         </div>
 
@@ -98,7 +98,7 @@
                 currentPage: 0,
                 tt: true,
                 dialogVisible: true,
-                touXiang:"",
+                touXiang:[],
                 totalThumb:0
             }
         },
@@ -127,8 +127,9 @@
                         username: this.msg.localUsername
                     }
                 }).then(res=>{
-                    this.touXiang=res.data;
-                    console.log(this.touXiang);
+                    this.$set(this.touXiang,0,{
+                        avatar:res.data});
+                    console.log(this.touXiang[0].avatar);
                 })
             },
             accessBlog(item, index) {
@@ -193,7 +194,7 @@
                         title: item.title,
                         content: item.content,
                         picture: item.picture,
-                        visible: jk
+                        visible: jk,
                     }
                 }).then(res => {
                     this.pageReload(this.currentPage);
