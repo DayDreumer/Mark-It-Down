@@ -86,8 +86,10 @@
             //图片上传函数
             $imgAdd(pos, $file){
                 // 第一步.将图片上传到服务器.
+                console.log("add");
                 var formdata = new FormData();
                 formdata.append('file', $file);
+                formdata.append('usage',0);
                 this.$axios({
                     url: '/upload',
                     method: 'post',
