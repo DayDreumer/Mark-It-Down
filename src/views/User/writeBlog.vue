@@ -90,6 +90,7 @@
                 var formdata = new FormData();
                 formdata.append('file', $file);
                 formdata.append('usage',0);
+                formdata.append("username",this.msg.localUsername);
                 this.$axios({
                     url: '/upload',
                     method: 'post',
@@ -103,6 +104,7 @@
                     var str = str.substr(place1);
                     var place2 = str.indexOf("}");
                     var str= str.replace("\"}","");
+                     console.log(str);
                     this.$refs.md.$img2Url(1+this.sum, str);
                     this.article.picture.push(str);
                     this.sum++;

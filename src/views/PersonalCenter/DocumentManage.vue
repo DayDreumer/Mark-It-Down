@@ -12,7 +12,6 @@
         :on-error="handleError"
         :on-preview="handlePreview"
         :on-change="handleChange"
-        accept=".jpg"
       >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -167,18 +166,20 @@ export default {
     },
     toJump(row) {
       var filename = row.filename;
-      let url = window.URL.createObjectURL(new Blob([row]), {
-        type: "image/jpeg",
-      });
-      console.log(url);
-      let link = document.createElement("a");
+      console.log(row);
+      const blob = new Blob([row]);
+      // let url = window.URL.createObjectURL(new Blob([row.url]), {
+      //   type: "image/jpg",
+      // });
+      const link = document.createElement("a");
       link.style.display = "none";
-      link.href = url;
-      link.setAttribute("download", filename);
+      // link.href = url;
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
       document.body.appendChild(link);
       link.click();
       //释放URL对象所占资源
-      window.URL.revokeObjectURL(url);
+      window.URL.revokeObjectURL(link.href);
       //用完即删
       document.body.removeChild(link);
     },
