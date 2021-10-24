@@ -1,5 +1,4 @@
-# MID-project
-### MID-project --> Mark it Down  
+# Mark-It-Down 
 ### 一个服务于学生(或个体)的个人学习生活分享记录平台
 ### javaEE小学期大作业web前端部分（Vue + elementUI）
 ---
